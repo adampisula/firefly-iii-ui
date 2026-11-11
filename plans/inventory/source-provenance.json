@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "https://github.com/firefly-iii/firefly-iii",
+  "checkoutPathFromFrontendRoot": "../firefly-iii",
+  "sourceRevision": "d65e916130c91d8f13ca808ca088d225ddd9a939",
+  "routeInventorySource": "routes/api.php",
+  "routeInventorySha256": "0f0d505e39f8e45dab0b396ba64204c6d8b07df89b29be7e1aae0fbce98b6350",
+  "inspectionVersion": "6.7.9",
+  "parserLimitations": "The 247-row inventory is a static snapshot produced with group-aware prefix and alias handling, not a general PHP AST or installed Laravel route registry. Any source revision or route-file hash drift requires reviewed regeneration and explicit inventory delta evidence."
+}

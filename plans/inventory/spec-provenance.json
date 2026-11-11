@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "targetBackendVersion": "6.7.9",
+  "status": "pinned",
+  "sourceRepository": "https://github.com/firefly-iii/api-docs",
+  "artifactUrl": "https://api-docs.firefly-iii.org/firefly-iii-v6.7.8-v1.yaml",
+  "sourceRevision": "v6.7.8",
+  "sha256": "3248747ff609176740be5eeddc885ad72cee87266b046a3f90917b532aadbf0a",
+  "license": "AGPL-3.0",
+  "notes": "Pinned to official Firefly III OpenAPI 3.0 specification from api-docs.firefly-iii.org (v6.7.8 specification adopted per explicit user scope decision 2026-11-11 for version-drift tooling while backend image remains 6.7.9)."
+}

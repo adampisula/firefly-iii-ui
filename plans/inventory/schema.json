@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "baselineCounts": {
+    "api-operations.csv": 247,
+    "ui-workflows.csv": 119
+  },
+  "statuses": ["planned", "implemented", "verified", "blocked", "unsupported"],
+  "verificationStates": [
+    "static_not_runtime_verified",
+    "runtime_verified",
+    "unsupported_source_discrepancy",
+    "approved_identity_handoff_tested",
+    "not_applicable"
+  ],
+  "dispositions": [
+    "api_supported",
+    "approved_native_identity_handoff",
+    "requires_contract_verification",
+    "unsupported_source_defect",
+    "residual_unsupported_scope_choice",
+    "external_tool",
+    "operational_guidance",
+    "historical_source_english_only"
+  ],
+  "inventories": {
+    "api": {
+      "file": "api-operations.csv",
+      "idField": "operation_id",
+      "headers": [
+        "operation_id",
+        "method",
+        "path",
+        "family",
+        "task_id",
+        "source",
+        "source_line",
+        "controller",
+        "action",
+        "controller_source",
+        "controller_line",
+        "permission_notes",
+        "alias_of",
+        "notes",
+        "status",
+        "verification",
+        "screen_or_client",
+        "test_references",
+        "evidence",
+        "disposition",
+        "disposition_reason"
+      ]
+    },
+    "ui": {
+      "file": "ui-workflows.csv",
+      "idField": "workflow_id",
+      "headers": [
+        "workflow_id",
+        "area",
+        "workflow",
+        "source",
+        "api_mapping_or_gap",
+        "task_id",
+        "status",
+        "notes",
+        "disposition",
+        "disposition_reason",
+        "screen_or_client",
+        "test_references",
+        "evidence",
+        "verification"
+      ]
+    }
+  }
+}

@@ -1,0 +1,390 @@
+:root {
+  color-scheme: light;
+
+  --white: #ffffff;
+  --grey-50: #f5f5f5;
+  --grey-200: #dbdbdb;
+  --grey-500: #8c8c8c;
+  --black: #000000;
+  --green: #137a50;
+  --mint: #6ee0a1;
+
+  --font:
+    "Urbanist", system-ui, -apple-system, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --numeric-variant: tabular-nums;
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-base: 15px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 21px;
+  --fs-3xl: 24px;
+  --fs-4xl: 28px;
+  --fs-display: 36px;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 18px;
+  --r-pill: 999px;
+
+  --t-fast: 160ms;
+  --t-mid: 260ms;
+  --t-slow: 380ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --target-min: 40px;
+  --target-touch: 44px;
+
+  --max: 1640px;
+  --side-w: 248px;
+  --side-w-compact: 76px;
+  --frost: 0.5;
+  --panel-blur: calc(14px + var(--frost) * 30px);
+  --glass-blur-inner: calc(8px + var(--frost) * 14px);
+
+  --bg: var(--grey-50);
+  --glass-base: color-mix(in oklab, var(--white) 90%, var(--green));
+  --tint: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--white) 92%, var(--grey-200))
+      calc(48% + var(--frost) * 32%),
+    transparent
+  );
+  --frost-tint: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--white) 94%, var(--grey-200))
+      calc(56% + var(--frost) * 26%),
+    transparent
+  );
+  --card: color-mix(
+    in oklab,
+    var(--glass-base) calc(54% + var(--frost) * 18%),
+    transparent
+  );
+  --card-glass: color-mix(
+    in oklab,
+    var(--glass-base) calc(58% + var(--frost) * 18%),
+    transparent
+  );
+  --card-flat: color-mix(
+    in oklab,
+    var(--glass-base) calc(38% + var(--frost) * 16%),
+    transparent
+  );
+  --card-sunk: color-mix(
+    in oklab,
+    var(--glass-base) calc(26% + var(--frost) * 12%),
+    transparent
+  );
+  --panel: color-mix(
+    in oklab,
+    var(--glass-base) calc(72% + var(--frost) * 16%),
+    transparent
+  );
+  --rail: color-mix(
+    in oklab,
+    var(--glass-base) calc(26% + var(--frost) * 12%),
+    transparent
+  );
+  --card-opaque: var(--white);
+  --panel-opaque: var(--white);
+  --rail-opaque: var(--grey-50);
+
+  --ink: var(--black);
+  --ink-2: color-mix(in oklab, var(--black) 82%, var(--grey-500));
+  --muted: color-mix(in oklab, var(--black) 45%, var(--grey-500));
+  --on-accent: var(--white);
+  --line: var(--grey-200);
+  --line-2: color-mix(in oklab, var(--black) 16%, var(--grey-200));
+  --glass-rim: color-mix(in oklab, var(--black) 12%, transparent);
+  --glass-sheen: inset 0 1px 0
+    color-mix(in oklab, var(--white) 45%, transparent);
+  --shadow-sm:
+    0 1px 2px color-mix(in oklab, var(--black) 6%, transparent),
+    0 10px 26px -18px color-mix(in oklab, var(--black) 30%, transparent);
+  --shadow:
+    0 1px 2px color-mix(in oklab, var(--black) 5%, transparent),
+    0 18px 40px -28px color-mix(in oklab, var(--black) 40%, transparent);
+  --shadow-lg:
+    0 2px 6px color-mix(in oklab, var(--black) 8%, transparent),
+    0 34px 70px -30px color-mix(in oklab, var(--black) 52%, transparent);
+
+  --accent: var(--green);
+  --accent-hi: color-mix(in oklab, var(--green) 82%, var(--black));
+  --accent-soft: color-mix(in oklab, var(--green) 10%, transparent);
+  --accent-wash: color-mix(in oklab, var(--green) 16%, var(--white));
+  --accent-line: color-mix(in oklab, var(--green) 30%, transparent);
+  --accent-glow: color-mix(in oklab, var(--green) 32%, transparent);
+  --signal: var(--mint);
+  --good: var(--green);
+  --good-soft: color-mix(in oklab, var(--green) 10%, transparent);
+  --warn: color-mix(in oklab, var(--black) 68%, var(--grey-500));
+  --warn-soft: color-mix(in oklab, var(--black) 7%, transparent);
+  --bad: var(--black);
+  --bad-soft: color-mix(in oklab, var(--black) 8%, transparent);
+  --info: color-mix(in oklab, var(--green) 62%, var(--black));
+  --info-soft: color-mix(in oklab, var(--green) 8%, transparent);
+
+  --c1: color-mix(in oklab, var(--green) 86%, var(--black));
+  --c2: color-mix(in oklab, var(--green) 56%, var(--white));
+  --c3: color-mix(in oklab, var(--green) 66%, var(--mint));
+  --c4: color-mix(in oklab, var(--green) 32%, var(--white));
+  --c5: color-mix(in oklab, var(--green) 30%, var(--black));
+  --c6: color-mix(in oklab, var(--green) 18%, var(--white));
+  --chip-bg: color-mix(in oklab, var(--white) 55%, transparent);
+  --scrim: color-mix(in oklab, var(--black) 34%, transparent);
+  --kbd-bg: color-mix(in oklab, var(--white) 60%, transparent);
+  --nav-active: var(--white);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: color-mix(in oklab, var(--black) 94%, var(--green));
+  --glass-base: color-mix(in oklab, var(--black) 84%, var(--green));
+  --tint: color-mix(
+    in oklab,
+    var(--glass-base) calc(46% + var(--frost) * 32%),
+    transparent
+  );
+  --frost-tint: color-mix(
+    in oklab,
+    var(--glass-base) calc(54% + var(--frost) * 28%),
+    transparent
+  );
+  --card: color-mix(
+    in oklab,
+    var(--glass-base) calc(38% + var(--frost) * 20%),
+    transparent
+  );
+  --card-glass: color-mix(
+    in oklab,
+    var(--glass-base) calc(42% + var(--frost) * 20%),
+    transparent
+  );
+  --card-flat: color-mix(
+    in oklab,
+    var(--glass-base) calc(26% + var(--frost) * 16%),
+    transparent
+  );
+  --card-sunk: color-mix(
+    in oklab,
+    var(--glass-base) calc(18% + var(--frost) * 12%),
+    transparent
+  );
+  --panel: color-mix(
+    in oklab,
+    var(--glass-base) calc(58% + var(--frost) * 20%),
+    transparent
+  );
+  --rail: color-mix(
+    in oklab,
+    var(--glass-base) calc(10% + var(--frost) * 10%),
+    transparent
+  );
+  --card-opaque: color-mix(in oklab, var(--black) 88%, var(--green));
+  --panel-opaque: color-mix(in oklab, var(--black) 92%, var(--green));
+  --rail-opaque: color-mix(in oklab, var(--black) 94%, var(--green));
+  --ink: var(--white);
+  --ink-2: color-mix(in oklab, var(--white) 86%, var(--grey-500));
+  --muted: color-mix(in oklab, var(--white) 62%, var(--grey-500));
+  --on-accent: color-mix(in oklab, var(--black) 86%, var(--green));
+  --line: color-mix(in oklab, var(--white) 14%, transparent);
+  --line-2: color-mix(in oklab, var(--white) 20%, transparent);
+  --glass-rim: color-mix(in oklab, var(--white) 12%, transparent);
+  --glass-sheen: inset 0 1px 0
+    color-mix(in oklab, var(--white) 16%, transparent);
+  --shadow-sm: 0 1px 2px color-mix(in oklab, var(--black) 50%, transparent);
+  --shadow:
+    0 1px 2px color-mix(in oklab, var(--black) 46%, transparent),
+    0 20px 44px -26px color-mix(in oklab, var(--black) 86%, transparent);
+  --shadow-lg:
+    0 2px 6px color-mix(in oklab, var(--black) 52%, transparent),
+    0 34px 80px -28px color-mix(in oklab, var(--black) 90%, transparent);
+  --accent: var(--mint);
+  --accent-hi: color-mix(in oklab, var(--mint) 82%, var(--white));
+  --accent-soft: color-mix(in oklab, var(--mint) 12%, transparent);
+  --accent-wash: color-mix(in oklab, var(--mint) 16%, transparent);
+  --accent-line: color-mix(in oklab, var(--mint) 34%, transparent);
+  --accent-glow: color-mix(in oklab, var(--mint) 28%, transparent);
+  --good: var(--mint);
+  --good-soft: color-mix(in oklab, var(--mint) 12%, transparent);
+  --warn: color-mix(in oklab, var(--white) 78%, var(--grey-500));
+  --warn-soft: color-mix(in oklab, var(--white) 8%, transparent);
+  --bad: var(--white);
+  --bad-soft: color-mix(in oklab, var(--white) 9%, transparent);
+  --info: color-mix(in oklab, var(--mint) 72%, var(--white));
+  --info-soft: color-mix(in oklab, var(--mint) 9%, transparent);
+  --c1: color-mix(in oklab, var(--mint) 88%, var(--white));
+  --c2: color-mix(in oklab, var(--green) 62%, var(--white));
+  --c3: color-mix(in oklab, var(--mint) 62%, var(--green));
+  --c4: color-mix(in oklab, var(--green) 74%, var(--white));
+  --c5: color-mix(in oklab, var(--mint) 44%, var(--green));
+  --c6: color-mix(in oklab, var(--green) 42%, var(--white));
+  --nav-active: color-mix(in oklab, var(--black) 86%, var(--green));
+  --chip-bg: color-mix(in oklab, var(--white) 8%, transparent);
+  --scrim: color-mix(in oklab, var(--black) 62%, transparent);
+  --kbd-bg: color-mix(in oklab, var(--white) 10%, transparent);
+  --panel-blur: calc(18px + var(--frost) * 32px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: color-mix(in oklab, var(--black) 94%, var(--green));
+    --glass-base: color-mix(in oklab, var(--black) 84%, var(--green));
+    --tint: color-mix(
+      in oklab,
+      var(--glass-base) calc(46% + var(--frost) * 32%),
+      transparent
+    );
+    --frost-tint: color-mix(
+      in oklab,
+      var(--glass-base) calc(54% + var(--frost) * 28%),
+      transparent
+    );
+    --card: color-mix(
+      in oklab,
+      var(--glass-base) calc(38% + var(--frost) * 20%),
+      transparent
+    );
+    --card-glass: color-mix(
+      in oklab,
+      var(--glass-base) calc(42% + var(--frost) * 20%),
+      transparent
+    );
+    --card-flat: color-mix(
+      in oklab,
+      var(--glass-base) calc(26% + var(--frost) * 16%),
+      transparent
+    );
+    --card-sunk: color-mix(
+      in oklab,
+      var(--glass-base) calc(18% + var(--frost) * 12%),
+      transparent
+    );
+    --panel: color-mix(
+      in oklab,
+      var(--glass-base) calc(58% + var(--frost) * 20%),
+      transparent
+    );
+    --rail: color-mix(
+      in oklab,
+      var(--glass-base) calc(10% + var(--frost) * 10%),
+      transparent
+    );
+    --card-opaque: color-mix(in oklab, var(--black) 88%, var(--green));
+    --panel-opaque: color-mix(in oklab, var(--black) 92%, var(--green));
+    --rail-opaque: color-mix(in oklab, var(--black) 94%, var(--green));
+    --ink: var(--white);
+    --ink-2: color-mix(in oklab, var(--white) 86%, var(--grey-500));
+    --muted: color-mix(in oklab, var(--white) 62%, var(--grey-500));
+    --on-accent: color-mix(in oklab, var(--black) 86%, var(--green));
+    --line: color-mix(in oklab, var(--white) 14%, transparent);
+    --line-2: color-mix(in oklab, var(--white) 20%, transparent);
+    --glass-rim: color-mix(in oklab, var(--white) 12%, transparent);
+    --glass-sheen: inset 0 1px 0
+      color-mix(in oklab, var(--white) 16%, transparent);
+    --shadow-sm: 0 1px 2px color-mix(in oklab, var(--black) 50%, transparent);
+    --shadow:
+      0 1px 2px color-mix(in oklab, var(--black) 46%, transparent),
+      0 20px 44px -26px color-mix(in oklab, var(--black) 86%, transparent);
+    --shadow-lg:
+      0 2px 6px color-mix(in oklab, var(--black) 52%, transparent),
+      0 34px 80px -28px color-mix(in oklab, var(--black) 90%, transparent);
+    --accent: var(--mint);
+    --accent-hi: color-mix(in oklab, var(--mint) 82%, var(--white));
+    --accent-soft: color-mix(in oklab, var(--mint) 12%, transparent);
+    --accent-wash: color-mix(in oklab, var(--mint) 16%, transparent);
+    --accent-line: color-mix(in oklab, var(--mint) 34%, transparent);
+    --accent-glow: color-mix(in oklab, var(--mint) 28%, transparent);
+    --good: var(--mint);
+    --good-soft: color-mix(in oklab, var(--mint) 12%, transparent);
+    --warn: color-mix(in oklab, var(--white) 78%, var(--grey-500));
+    --warn-soft: color-mix(in oklab, var(--white) 8%, transparent);
+    --bad: var(--white);
+    --bad-soft: color-mix(in oklab, var(--white) 9%, transparent);
+    --info: color-mix(in oklab, var(--mint) 72%, var(--white));
+    --info-soft: color-mix(in oklab, var(--mint) 9%, transparent);
+    --c1: color-mix(in oklab, var(--mint) 88%, var(--white));
+    --c2: color-mix(in oklab, var(--green) 62%, var(--white));
+    --c3: color-mix(in oklab, var(--mint) 62%, var(--green));
+    --c4: color-mix(in oklab, var(--green) 74%, var(--white));
+    --c5: color-mix(in oklab, var(--mint) 44%, var(--green));
+    --c6: color-mix(in oklab, var(--green) 42%, var(--white));
+    --nav-active: color-mix(in oklab, var(--black) 86%, var(--green));
+    --chip-bg: color-mix(in oklab, var(--white) 8%, transparent);
+    --scrim: color-mix(in oklab, var(--black) 62%, transparent);
+    --kbd-bg: color-mix(in oklab, var(--white) 10%, transparent);
+    --panel-blur: calc(18px + var(--frost) * 32px);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --panel-blur: 0px;
+    --glass-blur-inner: 0px;
+    --card: var(--card-opaque);
+    --card-glass: var(--card-opaque);
+    --card-flat: var(--card-opaque);
+    --card-sunk: var(--card-opaque);
+    --panel: var(--panel-opaque);
+    --rail: var(--rail-opaque);
+    --tint: var(--panel-opaque);
+    --frost-tint: var(--panel-opaque);
+  }
+
+  :root[data-theme="dark"] {
+    --card: var(--card-opaque);
+    --card-glass: var(--card-opaque);
+    --card-flat: var(--card-opaque);
+    --card-sunk: var(--card-opaque);
+    --panel: var(--panel-opaque);
+    --rail: var(--rail-opaque);
+    --tint: var(--panel-opaque);
+    --frost-tint: var(--panel-opaque);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --card: var(--card-opaque);
+      --card-glass: var(--card-opaque);
+      --card-flat: var(--card-opaque);
+      --card-sunk: var(--card-opaque);
+      --panel: var(--panel-opaque);
+      --rail: var(--rail-opaque);
+      --tint: var(--panel-opaque);
+      --frost-tint: var(--panel-opaque);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

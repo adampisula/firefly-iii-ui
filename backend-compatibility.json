@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "backend": {
+    "application": "Firefly III",
+    "supportedVersion": "6.7.9",
+    "versionPolicy": "exact",
+    "apiPath": "/api/v1",
+    "inspectionSourceCommit": "d65e916130c91d8f13ca808ca088d225ddd9a939",
+    "image": {
+      "repository": "fireflyiii/core",
+      "tag": "version-6.7.9",
+      "digest": "sha256:d51ab6a3a7b91a5c892441578e0da7f2935f84f36bd1151fc3833acc6e060871",
+      "verified": true
+    },
+    "modificationsAllowed": false
+  },
+  "frontend": {
+    "initialPlannedVersion": "6.7.9-frontend.0.1.0",
+    "versionPattern": "6.7.9-frontend.<major>.<minor>.<patch>",
+    "releaseTagPattern": "v6.7.9-frontend.<major>.<minor>.<patch>",
+    "uiLanguage": "en",
+    "brand": "Firefly",
+    "designReference": "Verdelo"
+  },
+  "runtimeCompatibility": {
+    "probePath": "/api/v1/about",
+    "responseVersionField": "data.version",
+    "onMismatchOrUnverifiable": "block_financial_access_and_show_compatibility_error",
+    "enforceOnServer": true
+  },
+  "verification": {
+    "state": "runtime_verified",
+    "runtimeVersionVerified": true,
+    "imageProvenanceVerified": true,
+    "notes": "Verified against official fireflyiii/core:version-6.7.9 Docker image (digest sha256:d51ab6a3a7b91a5c892441578e0da7f2935f84f36bd1151fc3833acc6e060871). Runtime probe /api/v1/about verified returning version 6.7.9 in data.version."
+  }
+}

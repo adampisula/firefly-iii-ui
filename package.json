@@ -1,0 +1,55 @@
+{
+  "name": "firefly-frontend",
+  "version": "6.7.9-frontend.0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@12.2.2",
+  "engines": {
+    "node": "26.13.0",
+    "npm": "12.2.2"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run check:version && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "check:version": "node scripts/check-version.mjs",
+    "validate:plans": "node scripts/validate-plans.mjs",
+    "test:unit": "node --test",
+    "test:smoke:production": "node scripts/smoke-production.mjs",
+    "test:browser": "playwright test",
+    "test:integration:firefly": "node scripts/run-firefly-integration.mjs",
+    "test": "npm run test:unit && npm run test:browser"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "1.65.0",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.2.3",
+    "eslint": "10.14.0",
+    "eslint-config-next": "16.4.6",
+    "prettier": "3.7.4",
+    "typescript": "6.0.3",
+    "yaml": "^2.8.3"
+  },
+  "overrides": {
+    "eslint": {
+      "minimatch": "11.0.5"
+    },
+    "@eslint/config-array": {
+      "minimatch": "11.0.5"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.5"
+    }
+  }
+}
