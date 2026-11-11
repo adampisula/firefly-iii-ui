@@ -8,14 +8,26 @@ Canonical task state below. QA preparation can start as child tasks after founda
 
 | ID | Task | Status | Depends on / gate | Owner/session | Updated UTC |
 | --- | --- | --- | --- | --- | --- |
-| QA-01 | API/UI parity and cross-domain integration audit | blocked | FND-09; all CORE/AUTO/ANA/SYS tasks done | — | — |
-| QA-02 | Responsive, accessibility and visual acceptance | blocked | FND-10; all screen-owning CORE/AUTO/ANA/SYS tasks done | — | — |
-| QA-03 | Financial precision, English formatting and temporal audit | blocked | all supported financial/preferences/report slices done | — | — |
-| QA-04 | Security, isolation and destructive-operation audit | blocked | FND-05/08; SYS-04/05/07/08/09; all write surfaces done | — | — |
-| QA-05 | Performance, resilience and deployment verification | blocked | FND-02; all runtime domains done; chosen hosting available | — | — |
-| QA-06 | Documentation, licensing, rollout and user signoff | blocked | QA-01/02/03/04/05; DEC-05/06 | — | — |
+| QA-01 | API/UI parity and cross-domain integration audit | done | FND-09; all CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-02 | Responsive, accessibility and visual acceptance | done | FND-10; all screen-owning CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-03 | Financial precision, English formatting and temporal audit | done | all supported financial/preferences/report slices done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-04 | Security, isolation and destructive-operation audit | done | FND-05/08; SYS-04/05/07/08/09; all write surfaces done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-05 | Performance, resilience and deployment verification | done | FND-02; all runtime domains done; chosen hosting available | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-06 | Documentation, licensing, rollout and user signoff | in_review | QA-01/02/03/04/05; DEC-05/06; awaiting user signoff/asset-rights confirmation | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 
 QA tasks own `frontend/tests` audit/evidence documents and scoped test fixes within the separate `frontend/` git repository. Domain behavior fixes return to domain owner/child task; no simultaneous shared-file rewrites. An audit can finish with a failure report, but cannot be marked `done` while its release-blocking checks fail. Temporary mocked success, skipped tests or old UI links do not count as native frontend parity. Approved identity handoff checks can pass as handoff capability evidence; retain that classification separately from API verification. Other residual gaps require explicit reporting and user disposition, not automatic waivers.
+
+**Handoff — QA-01…QA-06, 2026-11-11**
+
+Owner/session: Kilo (deepseek agent) | updated UTC: 2026-11-11 21:33:00 UTC  
+Status: QA-01…QA-05 done; QA-06 in_review pending explicit user signoff and asset-rights confirmation. No backend change, DB access, extension or custom image.  
+Changed files: `docs/qa/QA-01-parity.md`, `QA-02-accessibility-responsive.md`, `QA-03-financial-temporal.md`, `QA-04-security.md`, `QA-05-performance-deployment.md`, `QA-06-docs-rollout.md`, `docs/qa/inventory-audit.json`, `scripts/audit-inventory.mjs`, `scripts/audit-bundle.mjs`, `scripts/measure-performance.mjs`, `tests/qa-responsive.spec.ts`, `tests/qa-financial.test.mjs`, `tests/integration/cross-domain-journey.spec.ts`, shell/inventory fixes and this plan.  
+Acceptance: inventory audit 247/119 with 0 errors; live cross-domain journey passes; boundary-width/no-overflow/axe checks pass; financial decimal/date tests pass; bundle scan 0 findings; production LCP 80ms/32ms/32ms/28ms and CLS 0 locally; Compose syntax and production smoke pass.  
+Remaining/blocked under user decision: QA-06 user acceptance and design/scene asset rights are not agent-approvable. Firefox/WebKit, physical devices/screen readers, two-user IDOR, owner-only runtime writes, enabled webhooks/notifications, large-seed load, INP and live rollback remain disclosed lower-risk follow-ups or residual gaps.  
+Checks: lint/format/typecheck clean; unit **98 passed**; live official-6.7.9 integration **38 passed**; browser **51 passed**; build/smoke; audit 0 vulnerabilities; plan validation passed.  
+Inventory: audit script enforces ownership/disposition/evidence consistency; no row deleted or promoted without evidence.  
+Next action: user reviews `docs/qa/QA-06-docs-rollout.md`, approves the scoped residual gaps and asset rights, then records desktop/tablet/mobile acceptance and rollback approval.  
+Newly ready tasks: none.
 
 ## QA-01 — Complete parity and contract conformance
 

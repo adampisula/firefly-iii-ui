@@ -1,0 +1,36 @@
+{
+  "api": {
+    "rows": 247,
+    "statuses": {
+      "unsupported": 3,
+      "verified": 188,
+      "implemented": 47,
+      "planned": 9
+    },
+    "dispositions": {
+      "operational_guidance": 1,
+      "api_supported": 189,
+      "requires_contract_verification": 55,
+      "unsupported_source_defect": 1,
+      "residual_unsupported_scope_choice": 1
+    }
+  },
+  "ui": {
+    "rows": 119,
+    "statuses": {
+      "verified": 64,
+      "implemented": 31,
+      "planned": 1,
+      "unsupported": 23
+    },
+    "dispositions": {
+      "api_supported": 55,
+      "requires_contract_verification": 21,
+      "residual_unsupported_scope_choice": 24,
+      "approved_native_identity_handoff": 12,
+      "external_tool": 1,
+      "operational_guidance": 6
+    }
+  },
+  "errors": []
+}

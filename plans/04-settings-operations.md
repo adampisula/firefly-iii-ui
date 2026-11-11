@@ -10,15 +10,28 @@ All tasks require source/API request-field audit, permissions/feature flags, res
 
 | ID | Task | Status | Depends on / gate | Owner/session | Updated UTC |
 | --- | --- | --- | --- | --- | --- |
-| SYS-01 | Currency and exchange-rate management | blocked | BASE; CORE-02 | — | — |
-| SYS-02 | Existing financial administration settings | blocked | BASE; SYS-01 | — | — |
-| SYS-03 | Preferences, locale, appearance and date defaults | ready | BASE; FND-08 GAP-04 preference disposition | — | — |
-| SYS-04 | Profile, MFA, recovery and token/client lifecycle | ready | BASE; FND-05 trusted native identity handoff | — | — |
-| SYS-05 | Owner users/config/invitations/update checks | ready | BASE; FND-08 GAP-05 supported/residual split | — | — |
-| SYS-06 | CSV exports and Data Importer integration | ready | BASE; DEC-06 importer boundary | — | — |
-| SYS-07 | Destructive data maintenance and deferred processing | blocked | BASE; CORE-04/05 | — | — |
-| SYS-08 | About/config capabilities, help, cron and installer/support | ready | BASE; FND-08 GAP-07 disposition | — | — |
-| SYS-09 | User and owner notification configuration/testing | ready | BASE; FND-08 GAP-04 notification disposition | — | — |
+| SYS-01 | Currency and exchange-rate management | done | BASE; CORE-02 | Kilo (deepseek agent) | 2026-11-11 21:11:00 UTC |
+| SYS-02 | Existing financial administration settings | done | BASE; SYS-01 | Kilo (deepseek agent) | 2026-11-11 21:13:00 UTC |
+| SYS-03 | Preferences, locale, appearance and date defaults | done | BASE; FND-08 GAP-04 preference disposition | Kilo (deepseek agent) | 2026-11-11 21:08:00 UTC |
+| SYS-04 | Profile, MFA, recovery and token/client lifecycle | done | BASE; FND-05 trusted native identity handoff | Kilo (deepseek agent) | 2026-11-11 21:02:00 UTC |
+| SYS-05 | Owner users/config/invitations/update checks | done | BASE; FND-08 GAP-05 supported/residual split | Kilo (deepseek agent) | 2026-11-11 21:15:00 UTC |
+| SYS-06 | CSV exports and Data Importer integration | done | BASE; DEC-06 importer boundary | Kilo (deepseek agent) | 2026-11-11 21:06:00 UTC |
+| SYS-07 | Destructive data maintenance and deferred processing | done | BASE; CORE-04/05 | Kilo (deepseek agent) | 2026-11-11 21:15:00 UTC |
+| SYS-08 | About/config capabilities, help, cron and installer/support | done | BASE; FND-08 GAP-07 disposition | Kilo (deepseek agent) | 2026-11-11 21:04:00 UTC |
+| SYS-09 | User and owner notification configuration/testing | done | BASE; FND-08 GAP-04 notification disposition | Kilo (deepseek agent) | 2026-11-11 21:09:00 UTC |
+
+**Handoff — SYS-01…SYS-09, 2026-11-11**
+
+Owner/session: Kilo (deepseek agent) | updated UTC: 2026-11-11 21:15:00 UTC  
+Status: all plan-04 tasks done with supported slices and explicit residuals. No backend change, DB access or identity rebuild.  
+Changed files (umbrella): `src/lib/api/operations.ts` (currencies/rates, preferences, exports, users/config, user-groups, data maintenance), `src/features/currencies/*`, `src/features/preferences/*`, `src/features/administrations/*`, `src/features/administration-users/*`, `src/features/maintenance/*`, `src/app/(app)/currencies/*`, `exchange-rates`, `preferences`, `administration`, `admin/users`, `security`, `notifications`, `maintenance`, `export`, `help`, `reports`, `src/app/api/export/[resource]`, `src/app/api/attachments/[id]/download`, `src/lib/nav.ts`, new tests `core-sys01-currencies`, `core-sys02-administration`, `core-sys03-preferences`, `core-sys05-users`, `core-sys07-maintenance`, plus browser specs and inventory updates.  
+Acceptance completed: SYS-01 currency/rate reads, related endpoints, CER 500 evidence, owner-gated writes; SYS-02 administration title/primary currency read and role-gated write; SYS-03 five preference operations and key-by-key page; SYS-04 trusted native identity handoffs; SYS-05 permission-gated owner users/config UI; SYS-06 all ten CSV exports plus importer/backup boundaries; SYS-07 confirmed destroy/purge with bulk residual; SYS-08 release/config/cron/help diagnostics; SYS-09 notification residual without secret storage.  
+Acceptance remaining: owner-only currency/rate/user/link-type writes lack an owner fixture; bulk exchange-rate endpoints returned 500 and are not claimed; invitations/manual update checks/notification delivery have no API; SYS-07 bulk transaction edit/batch finish unexposed; locale-refresh side effects remain residual. No unsupported row was promoted.  
+Checks: lint/format/typecheck clean; unit suite **94 passed**; live official-6.7.9 integration suite **37 passed**; browser suite **49 passed** (axe across new routes); build and production smoke; `npm audit` 0 vulnerabilities; `validate:plans` 247 API/119 UI intact.  
+Inventory: read/permission/CER/export/destroy/purge evidence recorded; owner-only and no-API rows remain implemented/static, unsupported or residual.  
+Blockers/decisions: no owner fixture and no enabled webhook/notification APIs; destructive bulk workflows remain residual.  
+Next action: QA/delivery plan (`05-qa-delivery.md`) is the remaining programme phase; domain implementation plans 02–04 are complete except explicit residuals.  
+Newly ready tasks: QA plan tasks as defined by its canonical table (not claimed here).
 
 ## SYS-01 — Currencies and exchange rates
 

@@ -2,10 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ConnectForm } from "@/features/onboarding/connect-form";
 import { loadOnboardingState } from "@/features/onboarding/service";
+import {
+  getChart,
+  getSummary,
+  rangeFromKey,
+} from "@/features/analysis/service";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { getServerEnvironment } from "@/lib/server-env";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { Status } from "@/components/ui/primitives";
+import { MoneyDisplay, Status } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +24,16 @@ function backendPublicUrlOrNull(): string | null {
   }
 }
 
-export default async function OverviewPage() {
+export default async function OverviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolved = await searchParams;
+  const rawRange = Array.isArray(resolved.range)
+    ? resolved.range[0]
+    : resolved.range;
+  const range = rangeFromKey(rawRange);
   const context = await getSessionApiContext().catch(() => null);
   const backendPublicUrl = backendPublicUrlOrNull();
 
@@ -90,6 +104,36 @@ export default async function OverviewPage() {
   ).length;
   const role = context.auth.session.user.role;
 
+  const [summary, balanceChart, accountChart, budgetChart, categoryChart] =
+    await Promise.all([
+      getSummary(context.client, range.start, range.end).catch(() => ({})),
+      getChart(
+        context.client,
+        "chart.balance.balance",
+        range.start,
+        range.end,
+      ).catch(() => []),
+      getChart(
+        context.client,
+        "chart.account.overview",
+        range.start,
+        range.end,
+      ).catch(() => []),
+      getChart(
+        context.client,
+        "chart.budget.overview",
+        range.start,
+        range.end,
+      ).catch(() => []),
+      getChart(
+        context.client,
+        "chart.category.overview",
+        range.start,
+        range.end,
+      ).catch(() => []),
+    ]);
+  const summaryEntries = Object.entries(summary);
+
   return (
     <div className="page-stack">
       <section className="panel">
@@ -115,6 +159,88 @@ export default async function OverviewPage() {
           </Link>
         </div>
       </section>
+
+      <section className="panel">
+        <h2>Financial dashboard · {range.label}</h2>
+        <p className="muted-note">
+          Period {range.start} to {range.end}. Change the shell date range to
+          update this dashboard. Values are backend-authoritative.
+        </p>
+        {summaryEntries.length === 0 ? (
+          <p className="muted-note">
+            No summary values reported for this period.
+          </p>
+        ) : (
+          <dl className="detail-list">
+            {summaryEntries.map(([key, value]) => (
+              <div key={key}>
+                <dt>{key}</dt>
+                <dd>
+                  <MoneyDisplay
+                    amount={value.value}
+                    currency={value.currencyCode}
+                    decimalPlaces={value.decimalPlaces}
+                  />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </section>
+
+      {[
+        ["Balance history", balanceChart],
+        ["Account overview", accountChart],
+        ["Budget overview", budgetChart],
+        ["Category overview", categoryChart],
+      ].map(([title, points]) => (
+        <section className="panel" key={String(title)}>
+          <h2>{String(title)}</h2>
+          {Array.isArray(points) && points.length > 0 ? (
+            <div
+              className="table-scroll"
+              tabIndex={0}
+              role="region"
+              aria-label={String(title)}
+            >
+              <table className="data-table">
+                <caption>{String(title)}</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Label</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(
+                    points as {
+                      label: string;
+                      value: string;
+                      currencyCode: string;
+                      decimalPlaces: number;
+                    }[]
+                  ).map((point) => (
+                    <tr key={`${String(title)}-${point.label}`}>
+                      <td>{point.label}</td>
+                      <td>
+                        <MoneyDisplay
+                          amount={point.value}
+                          currency={point.currencyCode}
+                          decimalPlaces={point.decimalPlaces}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="muted-note">
+              No chart data reported for this period.
+            </p>
+          )}
+        </section>
+      ))}
 
       <section className="panel">
         <h2>Supported now</h2>

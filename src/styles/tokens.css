@@ -12,6 +12,8 @@
   --font:
     "Urbanist", system-ui, -apple-system, "Segoe UI", Helvetica, Arial,
     sans-serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, Consolas, monospace;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;

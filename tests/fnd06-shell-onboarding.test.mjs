@@ -76,7 +76,31 @@ test("navigation manifest has unique links and honest planned states", () => {
   assert.equal(findNavLinkBySegment("unknown-section"), undefined);
   assert.equal(
     ALL_NAV_LINKS.filter((link) => link.status === "available").every((link) =>
-      ["settings", "help"].includes(link.id),
+      [
+        "settings",
+        "help",
+        "search",
+        "accounts",
+        "transactions",
+        "link-types",
+        "budgets",
+        "subscriptions",
+        "piggy-banks",
+        "categories",
+        "attachments",
+        "insights",
+        "rules",
+        "recurrences",
+        "webhooks",
+        "export",
+        "preferences",
+        "maintenance",
+        "currencies",
+        "administration",
+        "users",
+        "reports",
+        "notifications",
+      ].includes(link.id),
     ),
     true,
   );

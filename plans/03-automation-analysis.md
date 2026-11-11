@@ -8,12 +8,12 @@ Canonical task state below. **BASE = FND-04/05/06/07/08/10 done.** Expand this s
 
 | ID | Task | Status | Depends on / gate | Owner/session | Updated UTC |
 | --- | --- | --- | --- | --- | --- |
-| AUTO-01 | Rule/group builder, testing and execution | blocked | BASE; CORE-03/04; FND-08 GAP-06 helper disposition | — | — |
-| AUTO-02 | Recurring transaction schedules and generation | blocked | BASE; CORE-04; FND-08 GAP-06 calendar/helper disposition | — | — |
-| AUTO-03 | Webhooks and delivery diagnostics | blocked | BASE; CORE-03 | — | — |
-| ANA-01 | Dashboard and all chart operations | blocked | BASE; CORE-02/03 | — | — |
-| ANA-02 | Insights across expenses, income and transfers | blocked | BASE; CORE-03 | — | — |
-| ANA-03 | Complete report builder and six report families | blocked | ANA-01/02; CORE-02/07/08/09/10; FND-08 GAP-03 supported/residual split | — | — |
+| AUTO-01 | Rule/group builder, testing and execution | done | BASE; CORE-03/04; FND-08 GAP-06 helper disposition | Kilo (deepseek agent) | 2026-11-11 20:58:00 UTC |
+| AUTO-02 | Recurring transaction schedules and generation | done | BASE; CORE-04; FND-08 GAP-06 calendar/helper disposition | Kilo (deepseek agent) | 2026-11-11 20:55:17 UTC |
+| AUTO-03 | Webhooks and delivery diagnostics | done | BASE; CORE-03 | Kilo (deepseek agent) | 2026-11-11 20:56:21 UTC |
+| ANA-01 | Dashboard and all chart operations | done | BASE; CORE-02/03 | Kilo (deepseek agent) | 2026-11-11 20:51:32 UTC |
+| ANA-02 | Insights across expenses, income and transfers | done | BASE; CORE-03 | Kilo (deepseek agent) | 2026-11-11 20:51:32 UTC |
+| ANA-03 | Complete report builder and six report families | done | ANA-01/02; CORE-02/07/08/09/10; FND-08 GAP-03 supported/residual split | Kilo (deepseek agent) | 2026-11-11 21:16:00 UTC |
 
 ## AUTO-01 — Rules and rule groups
 

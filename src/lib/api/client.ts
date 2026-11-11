@@ -160,6 +160,7 @@ export function createApiClient(options: ApiClientOptions) {
         query?: ApiQuery;
         body?: unknown;
         signal?: AbortSignal;
+        responseType?: "json" | "binary";
       } = {},
     ): Promise<ApiResponse<T>> {
       const definition = API_OPERATIONS[operation];
@@ -168,7 +169,7 @@ export function createApiClient(options: ApiClientOptions) {
         throw new TypeError("GET operations cannot include a request body.");
       }
       if ("body" in definition && !hasBody) {
-        throw new TypeError(`${operation} requires a JSON body.`);
+        throw new TypeError(`${operation} requires a request body.`);
       }
       if (!("body" in definition) && definition.method !== "GET" && hasBody) {
         throw new TypeError(`${operation} does not accept a request body.`);
@@ -207,7 +208,12 @@ export function createApiClient(options: ApiClientOptions) {
           ? AbortSignal.any([request.signal, AbortSignal.timeout(timeoutMs)])
           : AbortSignal.timeout(timeoutMs),
       };
-      if (hasBody) {
+      if (
+        hasBody &&
+        (request.body instanceof FormData || request.body instanceof Blob)
+      ) {
+        init.body = request.body;
+      } else if (hasBody) {
         headers.set("Content-Type", "application/json");
         init.body = JSON.stringify(request.body);
       } else if (
@@ -253,7 +259,9 @@ export function createApiClient(options: ApiClientOptions) {
       return {
         status: response.status,
         headers: responseHeaders,
-        data: (await decodeBody(response)) as T,
+        data: (request.responseType === "binary"
+          ? await response.blob()
+          : await decodeBody(response)) as T,
       };
     },
   };

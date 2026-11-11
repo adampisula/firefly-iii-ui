@@ -103,18 +103,17 @@ test("date range is URL backed and survives reload", async ({ page }) => {
   await expect(page.getByLabel("Date range")).toHaveValue("last-30-days");
 });
 
-test("planned deep links and unknown routes are honest", async ({ page }) => {
-  await page.goto("/accounts");
+test("unsupported deep links and unknown routes are honest", async ({
+  page,
+}) => {
+  await page.goto("/reports");
   await expect(
-    page.getByRole("heading", { name: "Accounts is planned" }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Not available in this release slice"),
+    page.getByRole("heading", { name: "Report families are unsupported" }),
   ).toBeVisible();
 
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Accounts is planned" }),
+    page.getByRole("heading", { name: "Report families are unsupported" }),
   ).toBeVisible();
 
   await page.goto("/definitely-not-a-section");

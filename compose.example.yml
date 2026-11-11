@@ -1,5 +1,6 @@
 services:
   frontend:
+    image: ${FRONTEND_IMAGE:-firefly-frontend:local}
     build:
       context: .
       dockerfile: Dockerfile

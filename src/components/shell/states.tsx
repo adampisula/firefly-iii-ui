@@ -27,13 +27,16 @@ export function EmptyState({
 export function ErrorState({
   title = "Something went wrong",
   children,
+  level = 2,
 }: {
   title?: string;
   children: ReactNode;
+  level?: 1 | 2;
 }) {
+  const Heading = level === 1 ? "h1" : "h2";
   return (
     <section className="panel" role="alert">
-      <h2>{title}</h2>
+      <Heading>{title}</Heading>
       {children}
     </section>
   );

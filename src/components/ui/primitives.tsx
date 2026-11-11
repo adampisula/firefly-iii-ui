@@ -72,17 +72,15 @@ export function Status({
   );
 }
 
-export interface TextFieldProps {
+export interface TextFieldProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "id" | "type"
+> {
   id: string;
   label: string;
   hint?: string;
   error?: string;
   type?: "text" | "email" | "search";
-  value?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  required?: boolean;
-  disabled?: boolean;
-  autoComplete?: string;
 }
 
 export function TextField({
@@ -133,6 +131,8 @@ export function DateField({
   onChange,
   required,
   disabled,
+  name,
+  error,
 }: {
   id: string;
   label: string;
@@ -140,6 +140,8 @@ export function DateField({
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   required?: boolean;
   disabled?: boolean;
+  name?: string;
+  error?: string;
 }) {
   return (
     <div className={styles.field}>
@@ -149,12 +151,15 @@ export function DateField({
       <input
         className={styles.input}
         id={id}
+        name={name}
         type="date"
         value={value}
         onChange={onChange}
         required={required}
         disabled={disabled}
+        aria-invalid={error ? true : undefined}
       />
+      {error ? <p className={styles.fieldError}>{error}</p> : null}
     </div>
   );
 }
@@ -166,6 +171,8 @@ export function CurrencyField({
   currencies,
   onChange,
   disabled,
+  name,
+  error,
 }: {
   id: string;
   label: string;
@@ -173,6 +180,8 @@ export function CurrencyField({
   currencies: readonly { code: string; name: string }[];
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
   disabled?: boolean;
+  name?: string;
+  error?: string;
 }) {
   return (
     <div className={styles.field}>
@@ -182,9 +191,11 @@ export function CurrencyField({
       <select
         className={styles.input}
         id={id}
+        name={name}
         value={value}
         onChange={onChange}
         disabled={disabled}
+        aria-invalid={error ? true : undefined}
       >
         {currencies.map(({ code, name }) => (
           <option key={code} value={code}>
@@ -192,6 +203,7 @@ export function CurrencyField({
           </option>
         ))}
       </select>
+      {error ? <p className={styles.fieldError}>{error}</p> : null}
     </div>
   );
 }
