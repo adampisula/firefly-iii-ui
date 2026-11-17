@@ -42,10 +42,24 @@ export default async function OverviewPage({
       <div className="page-stack">
         <section className="panel">
           <p className="eyebrow">Connect your account</p>
-          <h1 style={{ fontSize: "clamp(26px, 2.5vw, 36px)", margin: "8px 0 14px", letterSpacing: "-0.025em" }}>
+          <h1
+            style={{
+              fontSize: "clamp(26px, 2.5vw, 36px)",
+              margin: "8px 0 14px",
+              letterSpacing: "-0.025em",
+            }}
+          >
             Your finances, under your control.
           </h1>
-          <p className="lede" style={{ fontSize: "15px", color: "var(--muted)", maxWidth: "56ch", marginBottom: "18px" }}>
+          <p
+            className="lede"
+            style={{
+              fontSize: "15px",
+              color: "var(--muted)",
+              maxWidth: "56ch",
+              marginBottom: "18px",
+            }}
+          >
             Firefly runs against your own Firefly III 6.7.9 installation.
             Connect with a personal access token to start safe, API-backed
             setup.
@@ -53,18 +67,16 @@ export default async function OverviewPage({
           <ConnectForm backendPublicUrl={backendPublicUrl} />
         </section>
 
-        <OverviewDashboard
-          userName="Ines"
-          balanceTotal="$29,253.82"
-        />
+        <OverviewDashboard userName="Ines" balanceTotal="$29,253.82" />
 
         <section className="panel">
           <div className="chead">
             <div className="chead__text">
               <h2>What this frontend does not do</h2>
               <p>
-                It does not execute bank payments, issue cards or share household
-                finances. Identity management stays in the native Firefly backend.
+                It does not execute bank payments, issue cards or share
+                household finances. Identity management stays in the native
+                Firefly backend.
               </p>
             </div>
           </div>
@@ -115,10 +127,5 @@ export default async function OverviewPage({
   const userName = userEmail ? userEmail.split("@")[0] : "Ines";
   const capitalName = userName.charAt(0).toUpperCase() + userName.slice(1);
 
-  return (
-    <OverviewDashboard
-      userName={capitalName}
-      balanceTotal="$29,253.82"
-    />
-  );
+  return <OverviewDashboard userName={capitalName} balanceTotal="$29,253.82" />;
 }

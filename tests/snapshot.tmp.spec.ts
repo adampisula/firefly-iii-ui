@@ -1,5 +1,8 @@
 import { test } from "./pw-fixtures.ts";
-import { encryptSession, SESSION_COOKIE_NAME } from "../src/lib/auth/session.ts";
+import {
+  encryptSession,
+  SESSION_COOKIE_NAME,
+} from "../src/lib/auth/session.ts";
 
 test("take snapshots of pages", async ({ page, context }) => {
   await page.setViewportSize({ width: 1440, height: 900 });

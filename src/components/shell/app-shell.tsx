@@ -177,9 +177,7 @@ function UserMenu({
     }
   };
 
-  const initials = user
-    ? user.email.slice(0, 2).toUpperCase()
-    : "IO";
+  const initials = user ? user.email.slice(0, 2).toUpperCase() : "IO";
 
   return (
     <details className={styles.userMenu}>
@@ -293,7 +291,10 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
         Skip to main content
       </a>
 
-      <div className={styles.slab} data-rail-collapsed={railCollapsed || undefined}>
+      <div
+        className={styles.slab}
+        data-rail-collapsed={railCollapsed || undefined}
+      >
         <aside className={styles.rail} aria-label="Primary navigation">
           <div className={styles.railTop}>
             <Link className={styles.railBrand} href="/">

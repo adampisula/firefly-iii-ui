@@ -129,7 +129,9 @@ export function OverviewDashboard({
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [cards, setCards] = useState<CardData[]>(CARDS);
   const [flipped, setFlipped] = useState(false);
-  const [flowPeriod, setFlowPeriod] = useState<"Quarter" | "6 months" | "Year">("Year");
+  const [flowPeriod, setFlowPeriod] = useState<"Quarter" | "6 months" | "Year">(
+    "Year",
+  );
   const [noticeIndex, setNoticeIndex] = useState(0);
 
   const activeCard = cards[activeCardIndex] ?? cards[0];
@@ -185,9 +187,7 @@ export function OverviewDashboard({
         <div className="phead__text">
           <span className="eyebrow">Thursday, November 12</span>
           <h1>Good morning, {userName}</h1>
-          <p>
-            {userName} is paid in 3 days. Four bills go out before then.
-          </p>
+          <p>{userName} is paid in 3 days. Four bills go out before then.</p>
         </div>
         <div className="phead__actions">
           <button type="button" className="btn">
@@ -224,7 +224,8 @@ export function OverviewDashboard({
               style={{ cursor: "pointer" }}
             >
               {cards.map((c, i) => {
-                const order = (i - activeCardIndex + cards.length) % cards.length;
+                const order =
+                  (i - activeCardIndex + cards.length) % cards.length;
                 const isTop = i === activeCardIndex;
                 return (
                   <div
@@ -579,11 +580,7 @@ export function OverviewDashboard({
 
           <div className="txlist">
             {TRANSACTIONS.map((tx) => (
-              <Link
-                key={tx.id}
-                href="/transactions"
-                className="txrow"
-              >
+              <Link key={tx.id} href="/transactions" className="txrow">
                 <span className="cat-ico">
                   <Icon name={tx.icon} size={18} />
                 </span>
@@ -604,7 +601,9 @@ export function OverviewDashboard({
               <h2 id="ov-noticed-title">
                 <Icon name="sparkles" size={18} /> Noticed
               </h2>
-              <p>{noticeIndex + 1} of {notices.length}</p>
+              <p>
+                {noticeIndex + 1} of {notices.length}
+              </p>
             </div>
             <div className="phead__actions">
               <button

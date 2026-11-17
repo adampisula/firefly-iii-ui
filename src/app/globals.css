@@ -25,7 +25,8 @@ body {
 
 [data-theme="light"] body,
 html[data-theme="light"] body {
-  background: var(--bg) url("/scenes/room-blur.jpg") 50% 45% / cover no-repeat fixed;
+  background: var(--bg) url("/scenes/room-blur.jpg") 50% 45% / cover no-repeat
+    fixed;
 }
 
 [data-theme="dark"] body,
@@ -1147,13 +1148,19 @@ code {
   height: 190px;
   border-radius: var(--r-xl);
   padding: 18px 20px;
-  background: linear-gradient(150deg, color-mix(in oklab, var(--green) 80%, var(--mint)), var(--green) 55%, color-mix(in oklab, var(--green) 80%, var(--black)));
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--green) 80%, var(--mint)),
+    var(--green) 55%,
+    color-mix(in oklab, var(--green) 80%, var(--black))
+  );
   color: #ffffff;
   box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transform: translateY(calc(var(--i, 0) * -8px)) scale(calc(1 - var(--i, 0) * 0.04));
+  transform: translateY(calc(var(--i, 0) * -8px))
+    scale(calc(1 - var(--i, 0) * 0.04));
   transition: transform var(--t-mid) var(--ease-out);
 }
 
@@ -1162,7 +1169,12 @@ code {
 }
 
 .vcard--3 {
-  background: linear-gradient(150deg, var(--mint), color-mix(in oklab, var(--green) 66%, var(--mint)) 60%, var(--green));
+  background: linear-gradient(
+    150deg,
+    var(--mint),
+    color-mix(in oklab, var(--green) 66%, var(--mint)) 60%,
+    var(--green)
+  );
   color: #000000;
 }
 
@@ -1408,4 +1420,3 @@ code {
 .flow-legend i.is-out {
   background: var(--line-2);
 }
-
