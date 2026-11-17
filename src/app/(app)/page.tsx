@@ -1,12 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ConnectForm } from "@/features/onboarding/connect-form";
 import { loadOnboardingState } from "@/features/onboarding/service";
-import {
-  getChart,
-  getSummary,
-  rangeFromKey,
-} from "@/features/analysis/service";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { getServerEnvironment } from "@/lib/server-env";
 import { ErrorState } from "@/components/shell/states";
@@ -24,16 +18,7 @@ function backendPublicUrlOrNull(): string | null {
   }
 }
 
-export default async function OverviewPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const resolved = await searchParams;
-  const rawRange = Array.isArray(resolved.range)
-    ? resolved.range[0]
-    : resolved.range;
-  const range = rangeFromKey(rawRange);
+export default async function OverviewPage() {
   const context = await getSessionApiContext().catch(() => null);
   const backendPublicUrl = backendPublicUrlOrNull();
 

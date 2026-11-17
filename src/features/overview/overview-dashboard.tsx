@@ -226,7 +226,6 @@ export function OverviewDashboard({
               {cards.map((c, i) => {
                 const order =
                   (i - activeCardIndex + cards.length) % cards.length;
-                const isTop = i === activeCardIndex;
                 return (
                   <div
                     key={c.id}
