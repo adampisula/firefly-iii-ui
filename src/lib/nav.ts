@@ -263,3 +263,63 @@ export function findNavLinkByPath(pathname: string): NavLink | undefined {
 export function findNavLinkBySegment(segment: string): NavLink | undefined {
   return ALL_NAV_LINKS.find((link) => link.href === `/${segment}`);
 }
+
+export function getNavIcon(id: string): string {
+  switch (id) {
+    case "overview":
+      return "grid";
+    case "accounts":
+      return "card";
+    case "transactions":
+      return "swap";
+    case "search":
+      return "search";
+    case "budgets":
+      return "pie";
+    case "subscriptions":
+      return "repeat";
+    case "piggy-banks":
+      return "jar";
+    case "categories":
+    case "tags":
+      return "tag";
+    case "attachments":
+      return "upload";
+    case "object-groups":
+      return "panel";
+    case "link-types":
+      return "swap";
+    case "rules":
+      return "bolt";
+    case "webhooks":
+      return "wifi";
+    case "recurrences":
+      return "repeat";
+    case "insights":
+    case "reports":
+    case "exchange-rates":
+      return "chart";
+    case "currencies":
+      return "percent";
+    case "preferences":
+      return "sparkle";
+    case "users":
+    case "admin-users":
+      return "user";
+    case "administration":
+      return "users";
+    case "settings":
+      return "gear";
+    case "export":
+      return "download";
+    case "notifications":
+      return "bell";
+    case "maintenance":
+      return "refresh";
+    case "help":
+      return "help";
+    default:
+      return "grid";
+  }
+}
+

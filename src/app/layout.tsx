@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="stylesheet" href="/fonts/urbanist.css" />
         <Script
           id="ff-appearance"
           strategy="beforeInteractive"

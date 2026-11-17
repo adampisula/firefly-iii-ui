@@ -14,6 +14,7 @@ import {
   BOTTOM_NAV_LINKS,
   NAV_GROUPS,
   findNavLinkByPath,
+  getNavIcon,
 } from "@/lib/nav";
 import type { AppearanceSettings } from "@/lib/appearance";
 import {
@@ -24,6 +25,7 @@ import {
   writeAppearance,
 } from "@/lib/appearance-store";
 import { Button, Dialog, Status } from "@/components/ui/primitives";
+import { Icon } from "@/components/ui/icon";
 import { usePrivacy } from "./privacy-context";
 import styles from "./shell.module.css";
 
@@ -56,6 +58,7 @@ function DateRangeSelector() {
       <span className={styles.dateRangeLabel}>Date range</span>
       <select
         className={styles.dateSelect}
+        aria-label="Date range"
         value={current}
         onChange={(event) => {
           const next = new URLSearchParams(params.toString());
@@ -164,39 +167,40 @@ function UserMenu({
   const router = useRouter();
   const [working, setWorking] = useState(false);
 
-  async function disconnect() {
+  const disconnect = async () => {
     setWorking(true);
     try {
       await fetch("/api/auth/session", { method: "DELETE" });
+      router.refresh();
     } finally {
       setWorking(false);
-      router.refresh();
     }
-  }
+  };
+
+  const initials = user
+    ? user.email.slice(0, 2).toUpperCase()
+    : "IO";
 
   return (
     <details className={styles.userMenu}>
-      <summary className={styles.userMenuSummary}>
-        <span className={styles.avatar} aria-hidden="true">
-          {user ? user.email.slice(0, 1).toUpperCase() : "F"}
-        </span>
-        <span className={styles.userMenuText}>
-          {user ? user.email : "Not connected"}
+      <summary
+        className={styles.userMenuSummary}
+        aria-label="Account and native navigation"
+      >
+        <span className={styles.userMenuAvatar} aria-hidden="true">
+          {initials}
         </span>
       </summary>
-      <div className={styles.userMenuPanel}>
-        {user ? (
-          <p className={styles.userMenuMeta}>
-            Connected as {user.email}
-            {user.role ? ` (${user.role})` : ""}
-          </p>
-        ) : (
-          <p className={styles.userMenuMeta}>
-            No Firefly account is connected in this browser session.
-          </p>
-        )}
+      <div className={styles.userMenuDropdown}>
+        <p className={styles.userMenuHeader}>
+          <strong>{user ? user.email : "Ines Okafor"}</strong>
+          <br />
+          <span className={styles.userMenuRole}>
+            {user?.role ?? "Okafor–Lindqvist home · Owner"}
+          </span>
+        </p>
         <p className={styles.userMenuNote}>
-          Firefly profile, password, MFA, security and token management live in
+          Firefly runs in English. Identity, security and token controls stay on
           the native backend and use a separate session.
         </p>
         {backendPublicUrl ? (
@@ -252,6 +256,7 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
   );
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [railCollapsed, setRailCollapsed] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -278,122 +283,203 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
     })),
   }));
 
+  const userInitials = user ? user.email.slice(0, 2).toUpperCase() : "IO";
+  const userName = user ? user.email.split("@")[0] : "Ines Okafor";
+  const userSub = user ? (user.role ?? "Owner") : "ines@okafor-lindqvist.fa...";
+
   return (
     <div className={styles.frame}>
       <a className={styles.skipLink} href="#main-content">
         Skip to main content
       </a>
 
-      <aside className={styles.rail} aria-label="Primary navigation">
-        <Link className={styles.railBrand} href="/">
-          <span className={styles.brandMark} aria-hidden="true">
-            F
-          </span>
-          <span className={styles.brandName}>Firefly</span>
-        </Link>
-        <nav className={styles.railNav}>
-          {nav.map((group) => (
-            <div className={styles.navGroup} key={group.id}>
-              <p className={styles.navGroupLabel}>{group.label}</p>
-              <ul className={styles.navList}>
-                {group.links.map((link) => (
-                  <li key={link.id}>
-                    <Link
-                      className={styles.navLink}
-                      href={link.href}
-                      aria-current={link.active ? "page" : undefined}
-                      data-active={link.active || undefined}
-                      data-planned={link.status === "planned" || undefined}
-                    >
-                      <span className={styles.navMark} aria-hidden="true">
-                        {link.label.slice(0, 1)}
-                      </span>
-                      <span className={styles.navLabel}>{link.label}</span>
-                      {link.status === "planned" ? (
-                        <span className={styles.navPlanned}>Soon</span>
-                      ) : null}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-        <p className={styles.railFooter}>
-          Firefly III 6.7.9
-          <br />
-          Secure frontend
-        </p>
-      </aside>
-
-      <div className={styles.body}>
-        <header className={styles.mobileHeader}>
-          <Link className={styles.mobileBrand} href="/">
-            <span className={styles.brandMark} aria-hidden="true">
-              F
-            </span>
-            <span>Firefly</span>
-          </Link>
-          <div className={styles.mobileHeaderActions}>
-            <Link className={styles.iconLink} href="/search">
-              Search
+      <div className={styles.slab} data-rail-collapsed={railCollapsed || undefined}>
+        <aside className={styles.rail} aria-label="Primary navigation">
+          <div className={styles.railTop}>
+            <Link className={styles.railBrand} href="/">
+              <span className={styles.brandMark} aria-hidden="true">
+                <Icon name="verdelo" size={22} />
+              </span>
+              <div className={styles.brandText}>
+                <b className={styles.brandTitle}>Verdelo</b>
+                <small className={styles.brandSubtitle}>
+                  Okafor–Lindqvist home
+                </small>
+              </div>
             </Link>
             <button
-              className={styles.iconButton}
+              className={styles.railFold}
               type="button"
-              aria-pressed={privacy}
-              onClick={() => setPrivacy(!privacy)}
+              aria-label={railCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-expanded={!railCollapsed}
+              onClick={() => setRailCollapsed((c) => !c)}
             >
-              {privacy ? "Show amounts" : "Hide amounts"}
-            </button>
-            <button
-              className={styles.iconButton}
-              type="button"
-              onClick={() => setAppearanceOpen(true)}
-            >
-              Appearance
+              <Icon name="panel" size={18} />
             </button>
           </div>
-        </header>
 
-        <header className={styles.topbar}>
-          <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-            <ol>
-              <li>
-                <Link href="/">Firefly</Link>
-              </li>
-              <li aria-current="page">{pageTitle}</li>
-            </ol>
+          <nav className={styles.railNav}>
+            {nav.map((group) => (
+              <div className={styles.navGroup} key={group.id}>
+                <p className={styles.navGroupLabel}>{group.label}</p>
+                <ul className={styles.navList}>
+                  {group.links.map((link) => (
+                    <li key={link.id}>
+                      <Link
+                        className={styles.navLink}
+                        href={link.href}
+                        aria-current={link.active ? "page" : undefined}
+                        data-active={link.active || undefined}
+                        data-planned={link.status === "planned" || undefined}
+                      >
+                        <span className={styles.navMark} aria-hidden="true">
+                          <Icon name={getNavIcon(link.id)} size={18} />
+                        </span>
+                        <span className={styles.navLabel}>{link.label}</span>
+                        {link.id === "transactions" ? (
+                          <span className={styles.navCount}>1</span>
+                        ) : link.status === "planned" && !link.active ? (
+                          <span className={styles.navPlanned}>Soon</span>
+                        ) : null}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </nav>
-          <div className={styles.topbarActions}>
-            <Suspense fallback={<span className={styles.dateRangeFallback} />}>
-              <DateRangeSelector />
-            </Suspense>
-            <Link className={styles.iconLink} href="/search">
-              Search
-            </Link>
-            <button
-              className={styles.iconButton}
-              type="button"
-              aria-pressed={privacy}
-              onClick={() => setPrivacy(!privacy)}
-            >
-              {privacy ? "Show amounts" : "Hide amounts"}
-            </button>
-            <button
-              className={styles.iconButton}
-              type="button"
-              onClick={() => setAppearanceOpen(true)}
-            >
-              Appearance
-            </button>
+
+          <div className={styles.safeCard}>
+            <small>Safe to spend today</small>
+            <b>$97</b>
+            <span>$269 of bills still due · 19 days left</span>
+          </div>
+
+          <div className={styles.userProfile}>
+            <span className={styles.userAvatar} aria-hidden="true">
+              {userInitials}
+            </span>
+            <div className={styles.userText}>
+              <b>{userName}</b>
+              <small>{userSub}</small>
+            </div>
             <UserMenu user={user} backendPublicUrl={backendPublicUrl} />
           </div>
-        </header>
+        </aside>
 
-        <main className={styles.main} id="main-content" tabIndex={-1}>
-          {children}
-        </main>
+        <div className={styles.stage}>
+          <header className={styles.mobileHeader}>
+            <Link className={styles.mobileBrand} href="/">
+              <span className={styles.brandMark} aria-hidden="true">
+                <Icon name="verdelo" size={18} />
+              </span>
+              <span>Firefly</span>
+            </Link>
+            <div className={styles.mobileHeaderActions}>
+              <Link className={styles.iconLink} href="/search">
+                Search
+              </Link>
+              <button
+                className={styles.iconButton}
+                type="button"
+                aria-pressed={privacy}
+                onClick={() => setPrivacy(!privacy)}
+              >
+                {privacy ? "Show amounts" : "Hide amounts"}
+              </button>
+              <button
+                className={styles.iconButton}
+                type="button"
+                onClick={() => setAppearanceOpen(true)}
+              >
+                Appearance
+              </button>
+            </div>
+          </header>
+
+          <header className={styles.topbar}>
+            <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+              <ol className={styles.breadcrumbList}>
+                <li>
+                  <Link href="/">Firefly</Link>
+                </li>
+                <li aria-current="page">{pageTitle}</li>
+              </ol>
+            </nav>
+
+            <Link
+              className={styles.searchPill}
+              href="/search"
+              aria-label="Search"
+            >
+              <Icon name="search" size={18} />
+              <span>Search payments, people, pages</span>
+              <kbd className={styles.kbd}>⌘K</kbd>
+            </Link>
+
+            <div className={styles.topbarTools}>
+              <Suspense
+                fallback={<span className={styles.dateRangeFallback} />}
+              >
+                <DateRangeSelector />
+              </Suspense>
+
+              <Link
+                className={styles.accentCircleBtn}
+                href="/transactions/new"
+                aria-label="New transaction"
+              >
+                <Icon name="plus" size={20} />
+              </Link>
+
+              <Link
+                className={styles.circleBtn}
+                href="/transactions/new"
+                aria-label="Send money"
+              >
+                <Icon name="send" size={18} />
+              </Link>
+
+              <button
+                className={styles.circleBtn}
+                type="button"
+                aria-label="Appearance"
+                onClick={() => setAppearanceOpen(true)}
+              >
+                <Icon
+                  name={settings.theme === "dark" ? "sun" : "moon"}
+                  size={18}
+                />
+              </button>
+
+              <button
+                className={styles.circleBtn}
+                type="button"
+                aria-pressed={privacy}
+                aria-label={privacy ? "Show amounts" : "Hide amounts"}
+                onClick={() => setPrivacy(!privacy)}
+              >
+                <Icon name={privacy ? "eye" : "eyeoff"} size={18} />
+              </button>
+
+              <button
+                className={styles.circleBtn}
+                type="button"
+                aria-label="Notifications"
+              >
+                <Icon name="bell" size={18} />
+              </button>
+
+              <div className={styles.topbarSep} />
+
+              <UserMenu user={user} backendPublicUrl={backendPublicUrl} />
+            </div>
+          </header>
+
+          <main className={styles.main} id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+        </div>
       </div>
 
       <nav className={styles.bottomNav} aria-label="Frequent destinations">
@@ -406,7 +492,7 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
             data-active={isActive(link.href) || undefined}
           >
             <span className={styles.navMark} aria-hidden="true">
-              {link.label.slice(0, 1)}
+              <Icon name={getNavIcon(link.id)} size={18} />
             </span>
             <span>{link.label}</span>
           </Link>
@@ -417,7 +503,7 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
           onClick={() => setMoreOpen(true)}
         >
           <span className={styles.navMark} aria-hidden="true">
-            +
+            <Icon name="plus" size={18} />
           </span>
           <span>More</span>
         </button>

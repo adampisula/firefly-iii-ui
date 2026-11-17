@@ -20,9 +20,9 @@ Useful checks: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm
 `.github/workflows/docker-publish.yml` builds a multi-architecture image on every push to `main` and on manual dispatch, then publishes it to GitHub Container Registry:
 
 ```text
-ghcr.io/<owner>/<repository>:latest
-ghcr.io/<owner>/<repository>:sha-<short-sha>
-ghcr.io/<owner>/<repository>:main
+ghcr.io/adampisula/firefly-iii-ui:latest
+ghcr.io/adampisula/firefly-iii-ui:sha-<short-sha>
+ghcr.io/adampisula/firefly-iii-ui:main
 ```
 
 The workflow uses the repository `GITHUB_TOKEN`; no PAT or registry secret is required. Package visibility follows the repository/package settings in GitHub: public packages need no pull authentication, while private packages require `docker login ghcr.io` with a token that has `read:packages`. Platform images are `linux/amd64` and `linux/arm64`, with provenance and SBOM attestations.
@@ -36,7 +36,7 @@ Prerequisites: Docker with Compose v2, two public HTTPS origins (frontend and na
 Run the publish workflow (push to `main` or dispatch it manually). Then either pull the published image:
 
 ```sh
-docker pull ghcr.io/<owner>/<repository>:latest
+docker pull ghcr.io/adampisula/firefly-iii-ui:latest
 ```
 
 or build the image locally:
@@ -52,7 +52,7 @@ Pin a specific `sha-…` tag for reproducible upgrades; `latest` moves.
 Copy `.env.example` to `.env` and set real values:
 
 ```dotenv
-FRONTEND_IMAGE=ghcr.io/<owner>/<repository>:latest
+FRONTEND_IMAGE=ghcr.io/adampisula/firefly-iii-ui:latest
 FRONTEND_PUBLIC_URL=https://app.example.com
 BACKEND_PUBLIC_URL=https://firefly.example.com
 BACKEND_INTERNAL_API_URL=http://firefly:8080/api/v1
