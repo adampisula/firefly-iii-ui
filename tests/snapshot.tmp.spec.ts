@@ -1,8 +1,12 @@
 import { test } from "./pw-fixtures.ts";
-import { encryptSession, SESSION_COOKIE_NAME } from "../src/lib/auth/session.ts";
+import {
+  encryptSession,
+  SESSION_COOKIE_NAME,
+} from "../src/lib/auth/session.ts";
 
-test("take snapshots of pages", async ({ page, context }) => {
+test("take snapshots of pages", async ({ page, context }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 900 });
+  const screenshotPath = (name: string) => testInfo.outputPath(name);
 
   // Unauthenticated Connect view in dark mode
   await page.goto("/");
@@ -10,7 +14,7 @@ test("take snapshots of pages", async ({ page, context }) => {
     document.documentElement.dataset.theme = "dark";
   });
   await page.screenshot({
-    path: "/home/apisula/.gemini/antigravity/brain/79f1bbd3-aaa0-4fca-8cb8-37d3e4ec7d23/new-connect-dark.png",
+    path: screenshotPath("connect-dark.png"),
   });
 
   // Set authenticated session cookie
@@ -44,7 +48,7 @@ test("take snapshots of pages", async ({ page, context }) => {
     document.documentElement.dataset.theme = "dark";
   });
   await page.screenshot({
-    path: "/home/apisula/.gemini/antigravity/brain/79f1bbd3-aaa0-4fca-8cb8-37d3e4ec7d23/new-overview-dark.png",
+    path: screenshotPath("overview-dark.png"),
   });
 
   // Authenticated Overview in light mode
@@ -52,12 +56,12 @@ test("take snapshots of pages", async ({ page, context }) => {
     document.documentElement.dataset.theme = "light";
   });
   await page.screenshot({
-    path: "/home/apisula/.gemini/antigravity/brain/79f1bbd3-aaa0-4fca-8cb8-37d3e4ec7d23/new-overview-light.png",
+    path: screenshotPath("overview-light.png"),
   });
 
   // Mobile viewport
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({
-    path: "/home/apisula/.gemini/antigravity/brain/79f1bbd3-aaa0-4fca-8cb8-37d3e4ec7d23/new-overview-mobile.png",
+    path: screenshotPath("overview-mobile.png"),
   });
 });

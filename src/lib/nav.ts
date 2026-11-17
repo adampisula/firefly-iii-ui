@@ -322,4 +322,3 @@ export function getNavIcon(id: string): string {
       return "grid";
   }
 }
-
