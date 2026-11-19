@@ -18,6 +18,7 @@ import { TransactionActionsPanel } from "@/features/transaction-actions/transact
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { MoneyDisplay, Status } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 function valueOrMissing(value: string | number | null | undefined): string {
@@ -219,7 +220,7 @@ export default async function TransactionDetailPage({
             <dl className="detail-list">
               <div>
                 <dt>Date</dt>
-                <dd>{valueOrMissing(journal.date)}</dd>
+                <dd>{formatDisplayDate(journal.date)}</dd>
               </div>
               <div>
                 <dt>Source</dt>
@@ -381,7 +382,8 @@ export default async function TransactionDetailPage({
               <li key={event.id}>
                 {event.piggyBankName ??
                   `Piggy bank ${event.piggyBankId ?? "unknown"}`}
-                {event.date ? ` · ${event.date}` : ""} · amount {event.amount}
+                {event.date ? ` · ${formatDisplayDate(event.date)}` : ""} ·
+                amount {event.amount}
                 {event.journalId ? ` · journal ${event.journalId}` : ""}
               </li>
             ))}

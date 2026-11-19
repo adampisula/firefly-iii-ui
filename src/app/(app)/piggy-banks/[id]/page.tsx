@@ -9,6 +9,7 @@ import {
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { MoneyDisplay } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 function mapCurrencies(
@@ -140,7 +141,8 @@ export default async function PiggyDetailPage({
           <ul className="journal-list">
             {events.map((event) => (
               <li key={event.id}>
-                {event.date?.slice(0, 10) ?? "No date"} · amount {event.amount}
+                {event.date ? formatDisplayDate(event.date) : "No date"} ·
+                amount {event.amount}
                 {event.journalId ? ` · journal ${event.journalId}` : ""}
               </li>
             ))}

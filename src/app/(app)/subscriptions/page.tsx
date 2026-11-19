@@ -5,6 +5,7 @@ import { BillForm } from "@/features/subscriptions/bill-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { MoneyDisplay, PageHeader, Status } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 function mapCurrencies(payload: unknown): { code: string; name: string }[] {
@@ -132,7 +133,7 @@ export default async function SubscriptionsPage() {
                           </td>
                           <td>
                             {bill.nextExpectedMatch
-                              ? bill.nextExpectedMatch.slice(0, 10)
+                              ? formatDisplayDate(bill.nextExpectedMatch)
                               : "Not scheduled"}
                           </td>
                           <td>

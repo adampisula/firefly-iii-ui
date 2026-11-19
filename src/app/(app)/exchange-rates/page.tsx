@@ -5,6 +5,7 @@ import { DeleteRate, RateForm } from "@/features/currencies/currency-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { PageHeader } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 export default async function ExchangeRatesPage() {
@@ -78,7 +79,9 @@ export default async function ExchangeRatesPage() {
                     <td>
                       {rate.from}/{rate.to}
                     </td>
-                    <td>{rate.date?.slice(0, 10) ?? "Not dated"}</td>
+                    <td>
+                      {rate.date ? formatDisplayDate(rate.date) : "Not dated"}
+                    </td>
                     <td>{rate.rate}</td>
                     <td>{rate.date ? <DeleteRate rate={rate} /> : null}</td>
                   </tr>

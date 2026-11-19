@@ -11,6 +11,7 @@ Canonical task state below. QA preparation can start as child tasks after founda
 | QA-01 | API/UI parity and cross-domain integration audit | done | FND-09; all CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-02 | Responsive, accessibility and visual acceptance | done | FND-10; all screen-owning CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-02-a | User-reported appearance, rail, budget-button, piggy-currency and assistant UX fixes | in_review | QA-02 | Kilo (deepseek agent) | 2026-11-19 22:21:00 UTC |
+| QA-02-b | User-reported table, date-format, form-layout, tooltip, nav, select, status-pill and search-layout polish | in_review | QA-02-a | Kilo (deepseek agent) | 2026-11-19 23:02:00 UTC |
 | QA-03 | Financial precision, English formatting and temporal audit | done | all supported financial/preferences/report slices done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-04 | Security, isolation and destructive-operation audit | done | FND-05/08; SYS-04/05/07/08/09; all write surfaces done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-05 | Performance, resilience and deployment verification | done | FND-02; all runtime domains done; chosen hosting available | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
@@ -61,6 +62,17 @@ Checks: `npm run typecheck` pass; `npm run lint` pass; `npm run test:unit` 114 p
 Inventory: no status changes. `api.v1.piggy-banks.index/store/show/update` and `UI-CORE-09-01/03` remain verified/runtime-verified; `UI-CORE-09-02` remains implemented/static_not_runtime_verified because the positive-allocation bcsub backend defect is unchanged.  
 Remaining: user visual confirmation of the new glass/opacity controls, collapsed rail and assistant Markdown; physical-phone virtual-keyboard behavior was not exercised in this environment (coarse-pointer guard covered by code review only).  
 Next action: user reviews the running UI and confirms acceptance; then QA-02-a can move to `done`.
+
+### QA-02-b — Table, date, form, tooltip, nav and select polish (in_review)
+
+Owner/session: Kilo (deepseek agent) | updated UTC: 2026-11-19 23:02:00 UTC
+Status: implementation complete, automated checks pass, awaiting user visual confirmation on connected screens. No backend change, custom image, DB access or inventory promotion.
+Changes: savings-goal rows vertically centre cells; all displayed dates and date fields use dd/mm/yyyy (custom `DateInput` keeps the native calendar picker and submits YYYY-MM-DD); the savings-goal form is grouped title/amount/currency, dates/order, account/reserved amount/group; every labelled field gets an accent-aware i-circle helper with a custom hover tooltip plus primitive-field coverage, and feature navigation/breadcrumbs expose their descriptions; Overview no longer shows “Connected as”; sidebar active state updates optimistically on click; native selects use a frosted rounded shell with a padded custom chevron; success pills use `--accent-soft`; search input and submit button share a row.
+Changed files: `src/app/globals.css`, `src/app/layout.tsx`, `src/app/(app)/**` date-display pages, `src/components/shell/app-shell.tsx`, `src/components/ui/{primitives,date-field,field-hints}*`, `src/features/{budgets,currencies,overview,piggy-banks,recurrences,search,subscriptions,transactions}/*`, `src/lib/finance/{dates,date-input}.ts`, affected tests.
+Checks: `npm run typecheck` pass; `npm run lint` pass; `npm run format:check` pass; `npm run test:unit` 116 passed; `npm run build` pass; `npm run test:browser` 54 passed (including added date-display assertions, axe, contrast and 320px reflow). Manual Playwright probes confirmed dd/mm/yyyy input round-trip to `YYYY-MM-DD`, custom select appearance, tooltip visibility, search row alignment and optimistic rail active state under a delayed navigation.
+Inventory: no status changes; piggy API contracts and inventory dispositions are unchanged from QA-02-a.
+Remaining: user visual confirmation on a connected administration; native calendar picker internals still follow the browser locale, while the visible field and all displayed dates are dd/mm/yyyy; tooltips are hover/focus-oriented (touch devices rely on the label/i affordance).
+Next action: user reviews connected screens and confirms acceptance; then QA-02-b can move to `done`.
 
 ## QA-03 — Financial, English formatting and temporal invariants
 

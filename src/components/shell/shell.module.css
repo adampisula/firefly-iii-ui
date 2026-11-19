@@ -604,16 +604,31 @@
 
 .dateSelect {
   height: 44px;
-  padding: 0 var(--sp-4);
+  padding: 0 2.5rem 0 var(--sp-4);
+  -webkit-appearance: none;
+  appearance: none;
   border: 1px solid var(--glass-rim);
   border-radius: var(--r-pill);
-  background: var(--card);
+  background-color: var(--card);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) calc(50% + 1px),
+    calc(100% - 11px) calc(50% + 1px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
   color: var(--ink);
   font: inherit;
   font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+}
+
+.dateSelect option {
+  background: var(--panel-opaque);
+  color: var(--ink);
 }
 
 .dateSelect:focus-visible {

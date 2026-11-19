@@ -12,6 +12,7 @@ import {
   updateTransactionAction,
   type TransactionActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 
 const INITIAL: TransactionActionState = { ok: false, message: "", errors: {} };
 
@@ -217,15 +218,11 @@ export function TransactionForm({
                 >
                   Date
                 </label>
-                <input
-                  className="select"
+                <DateInput
                   id={`journal-${index}-date`}
                   name={`${prefix}date`}
-                  type="date"
                   value={journal.date}
-                  onChange={(event) =>
-                    updateJournal(index, { date: event.target.value })
-                  }
+                  onChange={(next) => updateJournal(index, { date: next })}
                   required
                 />
                 <FieldError

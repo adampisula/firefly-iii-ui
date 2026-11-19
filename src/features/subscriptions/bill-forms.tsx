@@ -8,6 +8,7 @@ import {
   saveBillAction,
   type BillActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 
 const INITIAL: BillActionState = { ok: false, message: "", errors: {} };
 
@@ -102,11 +103,9 @@ export function BillForm({
           <label className="field-label" htmlFor="bill-date">
             First date
           </label>
-          <input
-            className="select"
+          <DateInput
             id="bill-date"
             name="date"
-            type="date"
             defaultValue={bill?.date.slice(0, 10) ?? ""}
             required
           />
@@ -155,11 +154,9 @@ export function BillForm({
           <label className="field-label" htmlFor="bill-end">
             End date (optional)
           </label>
-          <input
-            className="select"
+          <DateInput
             id="bill-end"
             name="end_date"
-            type="date"
             defaultValue={bill?.endDate?.slice(0, 10) ?? ""}
           />
         </div>
@@ -167,11 +164,9 @@ export function BillForm({
           <label className="field-label" htmlFor="bill-extension">
             Extension date (optional)
           </label>
-          <input
-            className="select"
+          <DateInput
             id="bill-extension"
             name="extension_date"
-            type="date"
             defaultValue={bill?.extensionDate?.slice(0, 10) ?? ""}
           />
         </div>

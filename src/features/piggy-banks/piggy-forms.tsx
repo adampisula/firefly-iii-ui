@@ -7,6 +7,7 @@ import {
   savePiggyAction,
   type PiggyActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 
 const INITIAL: PiggyActionState = { ok: false, message: "", errors: {} };
 function Messages({ state }: { state: PiggyActionState }) {
@@ -83,14 +84,31 @@ export function PiggyForm({
           />
         </div>
         <div className="field-group">
+          <label className="field-label" htmlFor="piggy-currency">
+            Currency
+          </label>
+          <select
+            className="select"
+            id="piggy-currency"
+            name="currency_code"
+            defaultValue={primaryCurrency}
+          >
+            {selectableCurrencies.map((currency) => (
+              <option key={currency.code} value={currency.code}>
+                {currency.name} ({currency.code})
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="form-grid">
+        <div className="field-group">
           <label className="field-label" htmlFor="piggy-start">
             Start date
           </label>
-          <input
-            className="select"
+          <DateInput
             id="piggy-start"
             name="start_date"
-            type="date"
             defaultValue={piggy?.startDate?.slice(0, 10) ?? ""}
             required
           />
@@ -99,11 +117,9 @@ export function PiggyForm({
           <label className="field-label" htmlFor="piggy-end">
             Target date (optional)
           </label>
-          <input
-            className="select"
+          <DateInput
             id="piggy-end"
             name="target_date"
-            type="date"
             defaultValue={piggy?.targetDate?.slice(0, 10) ?? ""}
           />
         </div>
@@ -119,17 +135,8 @@ export function PiggyForm({
             defaultValue={piggy?.order ?? ""}
           />
         </div>
-        <div className="field-group">
-          <label className="field-label" htmlFor="piggy-group">
-            Object group title
-          </label>
-          <input
-            className="select"
-            id="piggy-group"
-            name="object_group_title"
-            defaultValue={piggy?.objectGroupTitle ?? ""}
-          />
-        </div>
+      </div>
+      <div className="form-grid">
         <div className="field-group">
           <label className="field-label" htmlFor="piggy-account">
             Reserved account
@@ -163,21 +170,15 @@ export function PiggyForm({
           />
         </div>
         <div className="field-group">
-          <label className="field-label" htmlFor="piggy-currency">
-            Currency
+          <label className="field-label" htmlFor="piggy-group">
+            Object group title
           </label>
-          <select
+          <input
             className="select"
-            id="piggy-currency"
-            name="currency_code"
-            defaultValue={primaryCurrency}
-          >
-            {selectableCurrencies.map((currency) => (
-              <option key={currency.code} value={currency.code}>
-                {currency.name} ({currency.code})
-              </option>
-            ))}
-          </select>
+            id="piggy-group"
+            name="object_group_title"
+            defaultValue={piggy?.objectGroupTitle ?? ""}
+          />
         </div>
       </div>
       <div className="field-group">

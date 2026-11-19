@@ -1,3 +1,4 @@
+import { formatDisplayDate } from "@/lib/finance/dates";
 import Link from "next/link";
 import {
   BarChart,
@@ -136,13 +137,7 @@ function BudgetProgress({ budgets }: { budgets: readonly OverviewBudget[] }) {
   );
 }
 
-export function OverviewDashboard({
-  data,
-  userEmail,
-}: {
-  data: OverviewData;
-  userEmail: string;
-}) {
+export function OverviewDashboard({ data }: { data: OverviewData }) {
   const orderedSummary = SUMMARY_ORDER.flatMap(({ kind }) =>
     summaryByKind(data.summary, kind),
   );
@@ -155,8 +150,8 @@ export function OverviewDashboard({
         title="Your money at a glance"
         lede={
           <>
-            {data.range.label} · {data.range.start} to {data.range.end} ·
-            Connected as {userEmail}
+            {data.range.label} · {formatDisplayDate(data.range.start)} to{" "}
+            {formatDisplayDate(data.range.end)}
           </>
         }
         actions={
@@ -316,7 +311,7 @@ export function OverviewDashboard({
                   if (!journal) return null;
                   return (
                     <tr key={group.id}>
-                      <td>{journal.date.slice(0, 10)}</td>
+                      <td>{formatDisplayDate(journal.date)}</td>
                       <td>
                         <Link
                           className="text-link"
@@ -395,7 +390,7 @@ export function OverviewDashboard({
                     <span className="muted-note">
                       {bill.repeatFreq} ·{" "}
                       {bill.nextExpectedMatch
-                        ? bill.nextExpectedMatch.slice(0, 10)
+                        ? formatDisplayDate(bill.nextExpectedMatch)
                         : "Not scheduled"}
                     </span>
                   </div>
@@ -447,7 +442,7 @@ export function OverviewDashboard({
                     percentage={piggy.percentage}
                     detail={
                       piggy.targetDate
-                        ? `Target date ${piggy.targetDate.slice(0, 10)}`
+                        ? `Target date ${formatDisplayDate(piggy.targetDate)}`
                         : "No target date reported"
                     }
                   />

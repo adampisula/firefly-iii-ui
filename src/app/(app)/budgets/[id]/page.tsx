@@ -15,6 +15,7 @@ import {
 import { ErrorState } from "@/components/shell/states";
 import { MoneyDisplay, Status } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 function mapCurrencies(payload: unknown): { code: string; name: string }[] {
@@ -125,7 +126,8 @@ export default async function BudgetDetailPage({
                     currency={limit.currencyCode}
                     decimalPlaces={limit.decimalPlaces}
                   />{" "}
-                  · {limit.start.slice(0, 10)} to {limit.end.slice(0, 10)}
+                  · {formatDisplayDate(limit.start)} to{" "}
+                  {formatDisplayDate(limit.end)}
                 </summary>
                 <p>
                   <Link

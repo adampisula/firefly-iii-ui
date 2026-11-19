@@ -14,6 +14,8 @@ import {
   Status,
 } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
+import { DateInput } from "@/components/ui/date-field";
 export const dynamic = "force-dynamic";
 
 function href(options: {
@@ -170,25 +172,13 @@ export default async function TransactionsPage({
             <label className="field-label" htmlFor="tx-start">
               Start date (optional)
             </label>
-            <input
-              className="select"
-              id="tx-start"
-              name="start"
-              type="date"
-              defaultValue={start}
-            />
+            <DateInput id="tx-start" name="start" defaultValue={start} />
           </div>
           <div className="field-group">
             <label className="field-label" htmlFor="tx-end">
               End date (optional)
             </label>
-            <input
-              className="select"
-              id="tx-end"
-              name="end"
-              type="date"
-              defaultValue={end}
-            />
+            <DateInput id="tx-end" name="end" defaultValue={end} />
           </div>
           <button className="button-link" type="submit">
             Apply filters
@@ -251,11 +241,7 @@ export default async function TransactionsPage({
                         <JournalSummary group={group} />
                       </td>
                       <td>
-                        {first
-                          ? new Date(first.date).toLocaleDateString("en-US", {
-                              timeZone: "UTC",
-                            })
-                          : "Not reported"}
+                        {first ? formatDisplayDate(first.date) : "Not reported"}
                       </td>
                       <td>
                         {group.journals

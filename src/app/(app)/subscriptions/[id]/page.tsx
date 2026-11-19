@@ -9,6 +9,7 @@ import {
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { MoneyDisplay, Status } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 function mapCurrencies(payload: unknown): { code: string; name: string }[] {
@@ -113,7 +114,7 @@ export default async function SubscriptionDetailPage({
         <p>
           Next expected:{" "}
           {bill.nextExpectedMatch
-            ? bill.nextExpectedMatch.slice(0, 10)
+            ? formatDisplayDate(bill.nextExpectedMatch)
             : "Not scheduled"}
           {bill.nextExpectedMatchDiff ? ` (${bill.nextExpectedMatchDiff})` : ""}
         </p>
@@ -132,7 +133,7 @@ export default async function SubscriptionDetailPage({
         ) : (
           <ul className="journal-list">
             {bill.payDates.map((date) => (
-              <li key={date}>{date.slice(0, 10)}</li>
+              <li key={date}>{formatDisplayDate(date)}</li>
             ))}
           </ul>
         )}

@@ -114,10 +114,5 @@ export default async function OverviewPage({
     );
   }
 
-  return (
-    <OverviewDashboard
-      data={overview}
-      userEmail={context.auth.session.user.email}
-    />
-  );
+  return <OverviewDashboard data={overview} />;
 }

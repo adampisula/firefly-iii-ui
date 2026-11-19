@@ -10,6 +10,7 @@ import {
 } from "react";
 import { formatEnglishMoney } from "@/lib/i18n/messages";
 import { useOptionalPrivacy } from "@/components/shell/privacy-context";
+import { DateInput } from "@/components/ui/date-field";
 import styles from "./primitives.module.css";
 
 type ButtonTone = "primary" | "quiet" | "danger";
@@ -98,7 +99,7 @@ export function TextField({
     .join(" ");
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
+      <label className={`${styles.label} field-label`} htmlFor={id}>
         {label}
         {inputProps.required ? <span aria-hidden="true"> *</span> : null}
       </label>
@@ -137,7 +138,7 @@ export function DateField({
   id: string;
   label: string;
   value?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onChange?: (value: string) => void;
   required?: boolean;
   disabled?: boolean;
   name?: string;
@@ -145,19 +146,18 @@ export function DateField({
 }) {
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
+      <label className={`${styles.label} field-label`} htmlFor={id}>
         {label}
       </label>
-      <input
-        className={styles.input}
+      <DateInput
         id={id}
         name={name}
-        type="date"
-        value={value}
-        onChange={onChange}
+        {...(onChange
+          ? { value: value ?? "", onChange }
+          : { defaultValue: value ?? "" })}
         required={required}
         disabled={disabled}
-        aria-invalid={error ? true : undefined}
+        ariaInvalid={Boolean(error)}
       />
       {error ? <p className={styles.fieldError}>{error}</p> : null}
     </div>
@@ -185,7 +185,7 @@ export function CurrencyField({
 }) {
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
+      <label className={`${styles.label} field-label`} htmlFor={id}>
         {label}
       </label>
       <select
@@ -356,7 +356,7 @@ export function AsyncCombobox({
 
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
+      <label className={`${styles.label} field-label`} htmlFor={id}>
         {label}
       </label>
       <div className={styles.combobox}>

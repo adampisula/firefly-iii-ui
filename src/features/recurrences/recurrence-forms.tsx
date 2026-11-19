@@ -8,6 +8,7 @@ import {
   triggerRecurrenceAction,
   type RecurrenceActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 
 const INITIAL: RecurrenceActionState = { ok: false, message: "", errors: {} };
 function Messages({ state }: { state: RecurrenceActionState }) {
@@ -76,11 +77,9 @@ export function RecurrenceForm({
           <label className="field-label" htmlFor="rec-first">
             First date
           </label>
-          <input
-            className="select"
+          <DateInput
             id="rec-first"
             name="first_date"
-            type="date"
             defaultValue={recurrence?.firstDate.slice(0, 10) ?? ""}
             required
           />
@@ -89,11 +88,9 @@ export function RecurrenceForm({
           <label className="field-label" htmlFor="rec-until">
             Repeat until (optional)
           </label>
-          <input
-            className="select"
+          <DateInput
             id="rec-until"
             name="repeat_until"
-            type="date"
             defaultValue={recurrence?.repeatUntil?.slice(0, 10) ?? ""}
           />
         </div>
@@ -311,13 +308,7 @@ export function TriggerRecurrenceForm({ id }: { id: string }) {
           <label className="field-label" htmlFor="trigger-date">
             Execution date
           </label>
-          <input
-            className="select"
-            id="trigger-date"
-            name="date"
-            type="date"
-            required
-          />
+          <DateInput id="trigger-date" name="date" required />
         </div>
         <label className="checkbox-row">
           <input type="checkbox" name="confirm_trigger" value="yes" required />

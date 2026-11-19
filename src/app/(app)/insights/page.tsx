@@ -14,6 +14,7 @@ import {
   PageHeader,
 } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 export default async function InsightsPage({
@@ -67,7 +68,7 @@ export default async function InsightsPage({
       <PageHeader
         eyebrow="Insights"
         title="Expense, income and transfer insights"
-        lede={`Backend aggregates for ${range.label} (${range.start} to ${range.end}). Aggregates are not a report builder.`}
+        lede={`Backend aggregates for ${range.label} (${formatDisplayDate(range.start)} to ${formatDisplayDate(range.end)}). Aggregates are not a report builder.`}
       />
       <FilterBar>
         <form className="search-form" action="/insights" method="get">

@@ -15,6 +15,7 @@ import {
   Status,
 } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 const QUERY_HELP = [
@@ -229,9 +230,7 @@ export default async function SearchPage({
                         </td>
                         <td>
                           {group.journals[0]
-                            ? new Date(
-                                group.journals[0].date,
-                              ).toLocaleDateString("en-US", { timeZone: "UTC" })
+                            ? formatDisplayDate(group.journals[0].date)
                             : "Not reported"}
                         </td>
                         <td>{group.journals[0]?.type ?? "Not reported"}</td>

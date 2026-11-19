@@ -29,6 +29,18 @@ export function validateInclusiveDateRange(
   return { start, end };
 }
 
+export function formatDisplayDate(value: string): string {
+  const dateOnly = value.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) return "Not reported";
+  assertDateOnly(dateOnly);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${dateOnly}T00:00:00.000Z`));
+}
+
 export function formatDateOnly(value: string, locale: string): string {
   assertDateOnly(value);
   return new Intl.DateTimeFormat(locale, {

@@ -15,6 +15,7 @@ import {
   saveLimitAction,
   type BudgetActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 
 const INITIAL: BudgetActionState = { ok: false, message: "", errors: {} };
 
@@ -215,11 +216,9 @@ export function LimitForm({
           >
             Start
           </label>
-          <input
-            className="select"
+          <DateInput
             id={`limit-start-${limit?.id ?? "new"}`}
             name="start"
-            type="date"
             defaultValue={limit?.start.slice(0, 10) ?? ""}
             required
           />
@@ -231,11 +230,9 @@ export function LimitForm({
           >
             End
           </label>
-          <input
-            className="select"
+          <DateInput
             id={`limit-end-${limit?.id ?? "new"}`}
             name="end"
-            type="date"
             defaultValue={limit?.end.slice(0, 10) ?? ""}
             required
           />

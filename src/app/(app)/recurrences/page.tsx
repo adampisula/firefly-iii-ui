@@ -5,6 +5,7 @@ import { RecurrenceForm } from "@/features/recurrences/recurrence-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
 import { PageHeader } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 function mapAccounts(
   payload: unknown,
@@ -118,8 +119,12 @@ export default async function RecurrencesPage() {
                       </Link>
                     </td>
                     <td>{recurrence.type}</td>
-                    <td>{recurrence.firstDate.slice(0, 10)}</td>
-                    <td>{recurrence.latestDate?.slice(0, 10) ?? "Never"}</td>
+                    <td>{formatDisplayDate(recurrence.firstDate)}</td>
+                    <td>
+                      {recurrence.latestDate
+                        ? formatDisplayDate(recurrence.latestDate)
+                        : "Never"}
+                    </td>
                     <td>{recurrence.repetitions[0]?.type ?? "None"}</td>
                   </tr>
                 ))}

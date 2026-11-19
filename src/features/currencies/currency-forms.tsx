@@ -10,6 +10,7 @@ import {
   saveRateAction,
   type CurrencyActionState,
 } from "./actions";
+import { DateInput } from "@/components/ui/date-field";
 const INITIAL: CurrencyActionState = { ok: false, message: "", errors: {} };
 function Messages({ state }: { state: CurrencyActionState }) {
   if (!state.message && Object.keys(state.errors).length === 0) return null;
@@ -222,13 +223,7 @@ export function RateForm() {
           <label className="field-label" htmlFor="rate-date">
             Date
           </label>
-          <input
-            className="select"
-            id="rate-date"
-            name="date"
-            type="date"
-            required
-          />
+          <DateInput id="rate-date" name="date" required />
         </div>
         <div className="field-group">
           <label className="field-label" htmlFor="rate-value">

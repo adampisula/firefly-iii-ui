@@ -203,6 +203,11 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [railCollapsed, setRailCollapsed] = useState(false);
+  const [pendingHref, setPendingHref] = useState<`/${string}` | null>(null);
+
+  useEffect(() => {
+    queueMicrotask(() => setPendingHref(null));
+  }, [pathname]);
 
   useEffect(() => {
     if (user) {
@@ -238,8 +243,12 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
 
   const activeLink = findNavLinkByPath(pathname);
   const pageTitle = activeLink?.label ?? "Firefly";
+  const pendingReached =
+    pendingHref === null ||
+    (pendingHref === "/" ? pathname === "/" : pathname.startsWith(pendingHref));
+  const activeHref = pendingHref && !pendingReached ? pendingHref : pathname;
   const isActive = (href: `/${string}`) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/" ? activeHref === "/" : activeHref.startsWith(href);
 
   const nav = NAV_GROUPS.map((group) => ({
     ...group,
@@ -298,6 +307,9 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                         aria-current={link.active ? "page" : undefined}
                         data-active={link.active || undefined}
                         data-planned={link.status === "planned" || undefined}
+                        title={link.description}
+                        aria-description={link.description}
+                        onClick={() => setPendingHref(link.href)}
                       >
                         <span className={styles.navMark} aria-hidden="true">
                           <Icon name={getNavIcon(link.id)} size={18} />
@@ -372,7 +384,9 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                 <li>
                   <Link href="/">Firefly</Link>
                 </li>
-                <li aria-current="page">{pageTitle}</li>
+                <li aria-current="page" title={activeLink?.description}>
+                  {pageTitle}
+                </li>
               </ol>
             </nav>
 
@@ -451,6 +465,9 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
             href={link.href}
             aria-current={isActive(link.href) ? "page" : undefined}
             data-active={isActive(link.href) || undefined}
+            title={link.description}
+            aria-description={link.description}
+            onClick={() => setPendingHref(link.href)}
           >
             <span className={styles.navMark} aria-hidden="true">
               <Icon name={getNavIcon(link.id)} size={18} />
@@ -488,7 +505,12 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                     <Link
                       className={styles.moreLink}
                       href={link.href}
-                      onClick={() => setMoreOpen(false)}
+                      title={link.description}
+                      aria-description={link.description}
+                      onClick={() => {
+                        setPendingHref(link.href);
+                        setMoreOpen(false);
+                      }}
                     >
                       <span>{link.label}</span>
                       {link.status === "planned" ? (

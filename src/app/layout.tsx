@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Script from "next/script";
 import { APPEARANCE_BOOTSTRAP_SCRIPT } from "@/lib/appearance";
 import { PrivacyProvider } from "@/components/shell/privacy-context";
+import { FieldHints } from "@/components/ui/field-hints";
 import "../styles/urbanist.css";
 import "../styles/tokens.css";
 import "./globals.css";
@@ -35,6 +36,7 @@ export default function RootLayout({
       </head>
       <body>
         <PrivacyProvider>{children}</PrivacyProvider>
+        <FieldHints />
       </body>
     </html>
   );

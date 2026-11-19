@@ -13,6 +13,7 @@ import {
 import { ErrorState } from "@/components/shell/states";
 import { MoneyDisplay } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 function mapAccounts(
   payload: unknown,
@@ -91,9 +92,12 @@ export default async function RecurrenceDetailPage({
         <p className="eyebrow">Recurrence {recurrence.id}</p>
         <h1>{recurrence.title}</h1>
         <p>
-          {recurrence.type} · first {recurrence.firstDate.slice(0, 10)} · latest{" "}
-          {recurrence.latestDate?.slice(0, 10) ?? "never"} ·{" "}
-          {recurrence.active ? "active" : "inactive"}
+          {recurrence.type} · first {formatDisplayDate(recurrence.firstDate)} ·
+          latest{" "}
+          {recurrence.latestDate
+            ? formatDisplayDate(recurrence.latestDate)
+            : "never"}{" "}
+          · {recurrence.active ? "active" : "inactive"}
         </p>
         <div className="button-row">
           <DeleteRecurrence id={recurrence.id} title={recurrence.title} />

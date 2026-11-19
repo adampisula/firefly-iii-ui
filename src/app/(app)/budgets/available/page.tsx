@@ -4,6 +4,7 @@ import { listAvailableBudgets } from "@/features/budgets/service";
 import { ErrorState } from "@/components/shell/states";
 import { MoneyDisplay, PageHeader } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 export default async function AvailableBudgetsPage() {
@@ -66,7 +67,7 @@ export default async function AvailableBudgetsPage() {
                 <tr key={item.id}>
                   <td>
                     {item.start
-                      ? `${item.start.slice(0, 10)} – ${item.end?.slice(0, 10) ?? ""}`
+                      ? `${formatDisplayDate(item.start)} – ${item.end ? formatDisplayDate(item.end) : ""}`
                       : `Available budget ${item.id}`}
                   </td>
                   <td>

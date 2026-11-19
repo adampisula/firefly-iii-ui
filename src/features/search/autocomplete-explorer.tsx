@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Status, TextField } from "@/components/ui/primitives";
 import { AUTOCOMPLETE_FAMILIES, type AutocompleteOption } from "./service";
+import { DateInput } from "@/components/ui/date-field";
 
 export function AutocompleteExplorer() {
   const [familyId, setFamilyId] = useState(AUTOCOMPLETE_FAMILIES[0].id);
@@ -120,12 +121,10 @@ export function AutocompleteExplorer() {
             <label className="field-label" htmlFor="lookup-date">
               Balance or result date (optional)
             </label>
-            <input
-              className="select"
+            <DateInput
               id="lookup-date"
-              type="date"
               value={date}
-              onChange={(event) => setDate(event.target.value)}
+              onChange={(next) => setDate(next)}
             />
           </div>
         ) : null}

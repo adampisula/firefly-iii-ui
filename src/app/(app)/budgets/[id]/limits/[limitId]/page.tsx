@@ -8,6 +8,7 @@ import {
 import { ErrorState } from "@/components/shell/states";
 import { MoneyDisplay } from "@/components/ui/primitives";
 
+import { formatDisplayDate } from "@/lib/finance/dates";
 export const dynamic = "force-dynamic";
 
 export default async function BudgetLimitPage({
@@ -67,7 +68,8 @@ export default async function BudgetLimitPage({
           />
         </h1>
         <p>
-          {limit.start.slice(0, 10)} to {limit.end.slice(0, 10)} · budget {id}
+          {formatDisplayDate(limit.start)} to {formatDisplayDate(limit.end)} ·
+          budget {id}
         </p>
         <Link className="text-link" href={`/budgets/${id}`}>
           Back to the budget

@@ -16,6 +16,10 @@ test("the shared component gallery has no axe violations in both themes", async 
   ).toBeHidden();
   await expect(page.getByText("Journal ID: sample-journal-1")).toBeVisible();
   await expect(page.getByText("€12.34", { exact: true })).toBeVisible();
+  const dateField = page.getByLabel("Date-only value");
+  await expect(dateField).toHaveAttribute("placeholder", "dd/mm/yyyy");
+  await dateField.fill("02/01/2027");
+  await expect(dateField).toHaveValue("02/01/2027");
 
   for (const theme of ["light", "dark"] as const) {
     for (const frost of [0, 0.5, 1]) {
