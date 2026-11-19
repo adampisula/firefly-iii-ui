@@ -7,7 +7,9 @@ import { MoneyDisplay, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
-function mapCurrencies(payload: unknown): { code: string; name: string }[] {
+function mapCurrencies(
+  payload: unknown,
+): { code: string; name: string; default?: boolean }[] {
   if (typeof payload !== "object" || payload === null) return [];
   const data = (payload as { data?: unknown }).data;
   if (!Array.isArray(data)) return [];
@@ -18,7 +20,8 @@ function mapCurrencies(payload: unknown): { code: string; name: string }[] {
     const record = attributes as Record<string, unknown>;
     const code = typeof record.code === "string" ? record.code : "";
     const name = typeof record.name === "string" ? record.name : "";
-    return code && name ? [{ code, name }] : [];
+    const isDefault = record.default === true || record.primary === true;
+    return code && name ? [{ code, name, default: isDefault }] : [];
   });
 }
 
@@ -63,7 +66,7 @@ export default async function PiggyBanksPage() {
     );
   let pigs;
   let accounts: { id: string; name: string; type: string }[] = [];
-  let currencies: { code: string; name: string }[] = [];
+  let currencies: { code: string; name: string; default?: boolean }[] = [];
   try {
     const [pigData, accountData, currencyData] = await Promise.all([
       listPiggyBanks(context.client),
@@ -137,8 +140,12 @@ export default async function PiggyBanksPage() {
                       {pig.targetAmount ? (
                         <MoneyDisplay
                           amount={pig.targetAmount}
-                          currency={pig.accounts[0]?.currencyCode ?? "EUR"}
-                          decimalPlaces={pig.accounts[0]?.decimalPlaces ?? 2}
+                          currency={
+                            pig.currencyCode ||
+                            pig.accounts[0]?.currencyCode ||
+                            "EUR"
+                          }
+                          decimalPlaces={pig.decimalPlaces}
                         />
                       ) : (
                         "No target"

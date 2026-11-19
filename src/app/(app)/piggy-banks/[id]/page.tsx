@@ -11,7 +11,9 @@ import { MoneyDisplay } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
-function mapCurrencies(payload: unknown): { code: string; name: string }[] {
+function mapCurrencies(
+  payload: unknown,
+): { code: string; name: string; default?: boolean }[] {
   if (typeof payload !== "object" || payload === null) return [];
   const data = (payload as { data?: unknown }).data;
   if (!Array.isArray(data)) return [];
@@ -22,7 +24,8 @@ function mapCurrencies(payload: unknown): { code: string; name: string }[] {
     const record = attributes as Record<string, unknown>;
     const code = typeof record.code === "string" ? record.code : "";
     const name = typeof record.name === "string" ? record.name : "";
-    return code && name ? [{ code, name }] : [];
+    const isDefault = record.default === true || record.primary === true;
+    return code && name ? [{ code, name, default: isDefault }] : [];
   });
 }
 
@@ -70,7 +73,7 @@ export default async function PiggyDetailPage({
   let piggy;
   let events;
   let accounts: { id: string; name: string; type: string }[] = [];
-  let currencies: { code: string; name: string }[] = [];
+  let currencies: { code: string; name: string; default?: boolean }[] = [];
   try {
     let currencyData;
     [piggy, events, accounts, currencyData] = await Promise.all([

@@ -61,6 +61,19 @@ test("appearance choices persist locally and apply before reload", async ({
   await dialog.getByLabel("Use opaque surfaces (reduced transparency)").check();
   await dialog.getByRole("button", { name: "Blue" }).click();
 
+  const opacity = dialog.getByLabel(/Background opacity/);
+  await opacity.focus();
+  await opacity.press("End");
+  const slab = page.locator('[class*="slab"]');
+  const opaque = dialog.getByLabel(
+    "Use opaque surfaces (reduced transparency)",
+  );
+  await opaque.uncheck();
+  await expect(slab).toHaveCSS("backdrop-filter", /blur/);
+  await dialog.getByLabel("Frost the main window").uncheck();
+  await expect(slab).toHaveCSS("backdrop-filter", "none");
+  await opaque.check();
+
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute(
     "data-reduced-transparency",
@@ -70,6 +83,15 @@ test("appearance choices persist locally and apply before reload", async ({
     document.documentElement.style.getPropertyValue("--accent-base"),
   );
   expect(accent).toBe("#93c5fd");
+  expect(
+    await page.evaluate(() =>
+      document.documentElement.style.getPropertyValue("--surface-alpha"),
+    ),
+  ).toBe("100%");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-frost-main",
+    "false",
+  );
 
   await dialog.getByLabel("Custom hex").fill("#ffff00");
   await dialog.getByRole("button", { name: "Apply" }).click();
@@ -80,12 +102,18 @@ test("appearance choices persist locally and apply before reload", async ({
   );
   expect(stored).toMatchObject({
     theme: "dark",
+    surfaceOpacity: 1,
+    frostMain: false,
     reducedTransparency: true,
     accent: { mode: "preset", value: "blue" },
   });
 
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-frost-main",
+    "false",
+  );
   await expect(page.locator("html")).toHaveAttribute(
     "data-reduced-transparency",
     "true",

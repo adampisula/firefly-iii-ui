@@ -29,20 +29,8 @@
 }
 
 .button_primary {
-  background: var(--green);
-  color: var(--white);
-}
-
-:global([data-theme="dark"]) .button_primary {
-  background-color: var(--mint);
-  color: var(--black);
-}
-
-@media (prefers-color-scheme: dark) {
-  :global(:root:not([data-theme="light"])) .button_primary {
-    background-color: var(--mint);
-    color: var(--black);
-  }
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .button_quiet {

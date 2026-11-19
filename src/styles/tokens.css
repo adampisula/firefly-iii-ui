@@ -61,11 +61,18 @@
   --side-w: 248px;
   --side-w-compact: 76px;
   --frost: 0.5;
+  --surface-alpha: 90%;
   --panel-blur: calc(14px + var(--frost) * 30px);
+  --main-blur: calc(4px + var(--frost) * 10px);
   --glass-blur-inner: calc(8px + var(--frost) * 14px);
 
   --bg: var(--grey-50);
   --glass-base: color-mix(in oklab, var(--white) 90%, var(--green));
+  --surface: color-mix(
+    in oklab,
+    var(--glass-base) var(--surface-alpha),
+    transparent
+  );
   --tint: color-mix(
     in oklab,
     color-mix(in oklab, var(--white) 92%, var(--grey-200))
@@ -347,7 +354,9 @@
 @media (prefers-reduced-transparency: reduce) {
   :root {
     --panel-blur: 0px;
+    --main-blur: 0px;
     --glass-blur-inner: 0px;
+    --surface: var(--panel-opaque);
     --card: var(--card-opaque);
     --card-glass: var(--card-opaque);
     --card-flat: var(--card-opaque);
@@ -359,6 +368,7 @@
   }
 
   :root[data-theme="dark"] {
+    --surface: var(--panel-opaque);
     --card: var(--card-opaque);
     --card-glass: var(--card-opaque);
     --card-flat: var(--card-opaque);
@@ -371,6 +381,7 @@
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
+      --surface: var(--panel-opaque);
       --card: var(--card-opaque);
       --card-glass: var(--card-opaque);
       --card-flat: var(--card-opaque);

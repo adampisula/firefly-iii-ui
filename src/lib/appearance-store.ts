@@ -4,6 +4,7 @@ import {
   PRIVACY_STORAGE_KEY,
   backgroundCssValue,
   clampFrost,
+  clampSurfaceOpacity,
   parseAppearance,
   parsePrivacy,
   readableInk,
@@ -85,6 +86,11 @@ export function applyAppearance(settings: AppearanceSettings) {
   const theme = resolveTheme(settings.theme, prefersDark);
   root.dataset.theme = theme;
   root.style.setProperty("--frost", String(clampFrost(settings.frost)));
+  root.style.setProperty(
+    "--surface-alpha",
+    `${Math.round(clampSurfaceOpacity(settings.surfaceOpacity) * 100)}%`,
+  );
+  root.dataset.frostMain = String(settings.frostMain);
   if (settings.reducedTransparency) {
     root.dataset.reducedTransparency = "true";
   } else {
@@ -111,7 +117,11 @@ export function applyAppearance(settings: AppearanceSettings) {
 }
 
 function cacheAppearance(settings: AppearanceSettings) {
-  const normalized = { ...settings, frost: clampFrost(settings.frost) };
+  const normalized = {
+    ...settings,
+    frost: clampFrost(settings.frost),
+    surfaceOpacity: clampSurfaceOpacity(settings.surfaceOpacity),
+  };
   const serialized = serializeAppearance(normalized);
   appearanceRaw = serialized;
   appearanceCache = normalized;
@@ -133,6 +143,8 @@ function isDefaultAppearance(settings: AppearanceSettings): boolean {
   return (
     settings.theme === DEFAULT_APPEARANCE.theme &&
     settings.frost === DEFAULT_APPEARANCE.frost &&
+    settings.surfaceOpacity === DEFAULT_APPEARANCE.surfaceOpacity &&
+    settings.frostMain === DEFAULT_APPEARANCE.frostMain &&
     settings.reducedTransparency === DEFAULT_APPEARANCE.reducedTransparency &&
     settings.accent.mode === "default" &&
     !settings.background.hasImage

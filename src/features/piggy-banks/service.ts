@@ -15,6 +15,8 @@ export interface PiggyBankRecord {
   name: string;
   targetAmount: string;
   currentAmount: string;
+  currencyCode: string;
+  decimalPlaces: number;
   percentage: number | null;
   startDate: string | null;
   targetDate: string | null;
@@ -59,12 +61,16 @@ export function mapPiggyBanks(payload: unknown): PiggyBankRecord[] {
     const accountsRaw = Array.isArray(attributes.accounts)
       ? attributes.accounts
       : [];
+    const currencyCode = text(attributes.currency_code);
+    const decimalPlaces = num(attributes.currency_decimal_places, 2);
     return [
       {
         id,
         name,
         targetAmount: text(attributes.target_amount),
         currentAmount: text(attributes.current_amount),
+        currencyCode,
+        decimalPlaces,
         percentage:
           typeof attributes.percentage === "number"
             ? attributes.percentage
@@ -83,8 +89,11 @@ export function mapPiggyBanks(payload: unknown): PiggyBankRecord[] {
               accountId,
               name: text(account.name),
               currentAmount: text(account.current_amount),
-              currencyCode: text(account.currency_code),
-              decimalPlaces: num(account.currency_decimal_places, 2),
+              currencyCode: text(account.currency_code) || currencyCode,
+              decimalPlaces:
+                typeof account.currency_decimal_places === "number"
+                  ? num(account.currency_decimal_places)
+                  : decimalPlaces,
             },
           ];
         }),
@@ -160,6 +169,8 @@ export function validatePiggyDraft(draft: PiggyDraft): {
     Number(draft.currentAmount) < 0
   )
     errors.currentAmount = "Enter a non-negative reserved amount.";
+  if (!/^[A-Z]{3}$/.test(draft.currencyCode))
+    errors.currencyCode = "Choose a currency.";
   if (draft.order && !/^\d+$/.test(draft.order))
     errors.order = "Order must be a whole number.";
   return { ok: Object.keys(errors).length === 0, errors };
@@ -178,7 +189,7 @@ export function piggyPayload(
   return {
     name: draft.name.trim(),
     target_amount: draft.targetAmount,
-    transaction_currency_code: draft.currencyCode,
+    transaction_currency_code: draft.currencyCode.trim(),
     start_date: draft.startDate,
     ...(draft.targetDate ? { target_date: draft.targetDate } : {}),
     ...(draft.order ? { order: Number(draft.order) } : {}),

@@ -11,6 +11,7 @@ import {
   APPEARANCE_VERSION,
   DEFAULT_APPEARANCE,
   clampFrost,
+  clampSurfaceOpacity,
   parseAccent,
   validateAccent,
   type AppearanceSettings,
@@ -39,6 +40,8 @@ interface StoredAppearance {
   version: number;
   theme: AppearanceSettings["theme"];
   frost: number;
+  surfaceOpacity: number;
+  frostMain: boolean;
   reducedTransparency: boolean;
   accent: AppearanceSettings["accent"];
   background: StoredBackground | null;
@@ -63,6 +66,8 @@ function emptyStored(): StoredAppearance {
     version: APPEARANCE_VERSION,
     theme: DEFAULT_APPEARANCE.theme,
     frost: DEFAULT_APPEARANCE.frost,
+    surfaceOpacity: DEFAULT_APPEARANCE.surfaceOpacity,
+    frostMain: DEFAULT_APPEARANCE.frostMain,
     reducedTransparency: DEFAULT_APPEARANCE.reducedTransparency,
     accent: DEFAULT_APPEARANCE.accent,
     background: null,
@@ -84,6 +89,14 @@ function parseStored(raw: string): StoredAppearance {
       typeof record.frost === "number"
         ? clampFrost(record.frost)
         : DEFAULT_APPEARANCE.frost;
+    const surfaceOpacity =
+      typeof record.surfaceOpacity === "number"
+        ? clampSurfaceOpacity(record.surfaceOpacity)
+        : DEFAULT_APPEARANCE.surfaceOpacity;
+    const frostMain =
+      typeof record.frostMain === "boolean"
+        ? record.frostMain
+        : DEFAULT_APPEARANCE.frostMain;
     const reducedTransparency =
       typeof record.reducedTransparency === "boolean"
         ? record.reducedTransparency
@@ -112,6 +125,8 @@ function parseStored(raw: string): StoredAppearance {
       version: APPEARANCE_VERSION,
       theme,
       frost,
+      surfaceOpacity,
+      frostMain,
       reducedTransparency,
       accent,
       background,
@@ -138,6 +153,8 @@ function toSettings(stored: StoredAppearance): AppearanceSettings {
     version: APPEARANCE_VERSION,
     theme: stored.theme,
     frost: stored.frost,
+    surfaceOpacity: stored.surfaceOpacity,
+    frostMain: stored.frostMain,
     reducedTransparency: stored.reducedTransparency,
     accent: stored.accent,
     background: backgroundSetting(stored.background),
@@ -199,6 +216,8 @@ export async function writeAppearance(
     version: APPEARANCE_VERSION,
     theme: settings.theme,
     frost: clampFrost(settings.frost),
+    surfaceOpacity: clampSurfaceOpacity(settings.surfaceOpacity),
+    frostMain: settings.frostMain,
     reducedTransparency: settings.reducedTransparency,
     accent: settings.accent,
     background: current.stored.background,

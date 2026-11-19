@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button, Status } from "@/components/ui/primitives";
 import { REASONING_EFFORTS } from "@/lib/assistant/config";
 import type {
@@ -387,7 +389,15 @@ export function AssistantChat({
                 data-role={message.role}
               >
                 <small>{message.role === "user" ? "You" : "Assistant"}</small>
-                <p>{message.content}</p>
+                {message.role === "assistant" ? (
+                  <div className={styles.markdown}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p>{message.content}</p>
+                )}
                 {message.toolEvents.length > 0 ? (
                   <ul className={styles.toolList}>
                     {message.toolEvents.map((event, index) => (
@@ -470,6 +480,19 @@ export function AssistantChat({
             id="assistant-message"
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (
+                event.key !== "Enter" ||
+                event.shiftKey ||
+                event.nativeEvent.isComposing
+              )
+                return;
+              const coarsePointer =
+                window.matchMedia("(pointer: coarse)").matches;
+              if (coarsePointer) return;
+              event.preventDefault();
+              void send(draft);
+            }}
             placeholder="Ask about spending, budgets, accounts, savings goals..."
             rows={3}
             maxLength={8000}

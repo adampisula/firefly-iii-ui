@@ -33,9 +33,13 @@ test("appearance storage is per user and preserves background metadata", async (
   const saved = await writeAppearance("user-one", {
     ...DEFAULT_APPEARANCE,
     theme: "dark",
+    surfaceOpacity: 0.72,
+    frostMain: false,
     accent: { mode: "preset", value: "blue" },
   });
   assert.equal(saved.theme, "dark");
+  assert.equal(saved.surfaceOpacity, 0.72);
+  assert.equal(saved.frostMain, false);
 
   const uploaded = await writeBackground("user-one", "image/png", png);
   assert.equal(uploaded.background.mime, "image/png");

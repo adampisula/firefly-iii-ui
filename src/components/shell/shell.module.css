@@ -35,24 +35,19 @@
   margin: 0 auto;
   border-radius: var(--r-xl);
   overflow: hidden;
-  background:
-    linear-gradient(var(--tint), var(--tint)),
-    var(--bg) var(--app-bg-image, url("/scenes/room.jpg")) 50% 45% / cover
-      no-repeat fixed;
+  background: var(--surface);
   box-shadow:
     inset 0 0 0 1px var(--glass-rim),
     var(--glass-sheen),
     var(--shadow-lg);
-  backdrop-filter: blur(var(--panel-blur));
-  -webkit-backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--main-blur));
+  backdrop-filter: blur(var(--main-blur));
   transition: grid-template-columns var(--t-mid, 240ms) var(--ease-out, ease);
 }
 
-[data-theme="dark"] .slab {
-  background:
-    linear-gradient(var(--tint), var(--tint)),
-    var(--bg) var(--app-bg-image, url("/scenes/room.jpg")) 50% 45% / cover
-      no-repeat fixed;
+:global([data-frost-main="false"]) .slab {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* Collapsed sidebar */
@@ -64,24 +59,50 @@
 .slab[data-rail-collapsed] .navGroupLabel,
 .slab[data-rail-collapsed] .navLabel,
 .slab[data-rail-collapsed] .navPlanned,
+.slab[data-rail-collapsed] .navCount,
 .slab[data-rail-collapsed] .safeCard,
-.slab[data-rail-collapsed] .userText {
+.slab[data-rail-collapsed] .userText,
+.slab[data-rail-collapsed] .userAvatar {
   display: none;
 }
 
 .slab[data-rail-collapsed] .rail {
   align-items: center;
-  padding-inline: var(--sp-2);
+  padding: 14px var(--sp-2);
+  scrollbar-width: none;
+}
+
+.slab[data-rail-collapsed] .rail::-webkit-scrollbar {
+  display: none;
+}
+
+.slab[data-rail-collapsed] .railTop {
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 14px;
+}
+
+.slab[data-rail-collapsed] .railBrand {
+  flex: none;
+  justify-content: center;
+}
+
+.slab[data-rail-collapsed] .railNav {
+  width: 100%;
 }
 
 .slab[data-rail-collapsed] .navLink {
+  width: 44px;
+  margin: 0 auto;
   justify-content: center;
   padding: 0;
+  border-radius: var(--r-md);
 }
 
 .slab[data-rail-collapsed] .userProfile {
+  gap: 0;
   justify-content: center;
-  padding: 4px;
+  padding: 0;
 }
 
 .slab[data-rail-collapsed] .railFold {
@@ -858,24 +879,54 @@
   .navGroupLabel,
   .navLabel,
   .navPlanned,
+  .navCount,
   .safeCard,
-  .userText {
+  .userText,
+  .userAvatar {
     display: none;
   }
 
   .rail {
     align-items: center;
-    padding-inline: var(--sp-2);
+    padding: 14px var(--sp-2);
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railTop {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 0 14px;
+  }
+
+  .railBrand {
+    flex: none;
+    justify-content: center;
+  }
+
+  .railNav {
+    width: 100%;
   }
 
   .navLink {
+    width: 44px;
+    margin: 0 auto;
+    justify-content: center;
+    padding: 0;
+    border-radius: var(--r-md);
+  }
+
+  .userProfile {
+    gap: 0;
     justify-content: center;
     padding: 0;
   }
 
-  .userProfile {
-    justify-content: center;
-    padding: 4px;
+  .railFold {
+    display: none;
   }
 }
 

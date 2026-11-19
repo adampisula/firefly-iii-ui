@@ -45,6 +45,8 @@ export interface AppearanceSettings {
   version: number;
   theme: ThemePreference;
   frost: number;
+  surfaceOpacity: number;
+  frostMain: boolean;
   reducedTransparency: boolean;
   accent: AccentSetting;
   background: BackgroundSetting;
@@ -61,6 +63,8 @@ export const DEFAULT_APPEARANCE: AppearanceSettings = {
   version: APPEARANCE_VERSION,
   theme: "system",
   frost: 0.5,
+  surfaceOpacity: 0.9,
+  frostMain: true,
   reducedTransparency: false,
   accent: { mode: "default" },
   background: DEFAULT_BACKGROUND,
@@ -72,6 +76,11 @@ const PRESET_IDS = new Set(ACCENT_PRESETS.map((preset) => preset.id));
 export function clampFrost(value: number): number {
   if (!Number.isFinite(value)) return DEFAULT_APPEARANCE.frost;
   return Math.min(1, Math.max(0, value));
+}
+
+export function clampSurfaceOpacity(value: number): number {
+  if (!Number.isFinite(value)) return DEFAULT_APPEARANCE.surfaceOpacity;
+  return Math.min(1, Math.max(0.5, value));
 }
 
 export function isHexColor(value: string): boolean {
@@ -229,6 +238,14 @@ export function parseAppearance(raw: string | null): AppearanceSettings {
       typeof record.frost === "number"
         ? clampFrost(record.frost)
         : DEFAULT_APPEARANCE.frost;
+    const surfaceOpacity =
+      typeof record.surfaceOpacity === "number"
+        ? clampSurfaceOpacity(record.surfaceOpacity)
+        : DEFAULT_APPEARANCE.surfaceOpacity;
+    const frostMain =
+      typeof record.frostMain === "boolean"
+        ? record.frostMain
+        : DEFAULT_APPEARANCE.frostMain;
     const reducedTransparency =
       typeof record.reducedTransparency === "boolean"
         ? record.reducedTransparency
@@ -237,6 +254,8 @@ export function parseAppearance(raw: string | null): AppearanceSettings {
       version: APPEARANCE_VERSION,
       theme,
       frost,
+      surfaceOpacity,
+      frostMain,
       reducedTransparency,
       accent: parseAccent(record.accent),
       background: parseBackground(record.background),
@@ -251,6 +270,8 @@ export function serializeAppearance(settings: AppearanceSettings): string {
     version: APPEARANCE_VERSION,
     theme: settings.theme,
     frost: clampFrost(settings.frost),
+    surfaceOpacity: clampSurfaceOpacity(settings.surfaceOpacity),
+    frostMain: settings.frostMain,
     reducedTransparency: settings.reducedTransparency,
     accent: settings.accent,
     background: settings.background,
@@ -277,4 +298,4 @@ export function backgroundCssValue(background: BackgroundSetting): string {
 
 const PRESETS_JSON = JSON.stringify(ACCENT_PRESETS);
 
-export const APPEARANCE_BOOTSTRAP_SCRIPT = `(function(){try{var presets=${PRESETS_JSON};var raw=localStorage.getItem("${APPEARANCE_STORAGE_KEY}");var settings={theme:"system",frost:0.5,reducedTransparency:false,accent:{mode:"default"},background:{hasImage:false,url:null}};if(raw){try{var parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object"){if(parsed.theme==="light"||parsed.theme==="dark"||parsed.theme==="system"){settings.theme=parsed.theme;}if(typeof parsed.frost==="number"&&isFinite(parsed.frost)){settings.frost=Math.min(1,Math.max(0,parsed.frost));}if(typeof parsed.reducedTransparency==="boolean"){settings.reducedTransparency=parsed.reducedTransparency;}if(parsed.accent&&typeof parsed.accent==="object"){settings.accent=parsed.accent;}if(parsed.background&&typeof parsed.background==="object"){settings.background=parsed.background;}}}catch(e){}}var dark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;var resolved=settings.theme==="system"?(dark?"dark":"light"):settings.theme;var root=document.documentElement;root.dataset.theme=resolved;root.style.setProperty("--frost",String(settings.frost));if(settings.reducedTransparency){root.dataset.reducedTransparency="true";}var accent=settings.accent;var color=null;if(accent&&accent.mode==="preset"){for(var i=0;i<presets.length;i++){if(presets[i].id===accent.value){color=resolved==="dark"?presets[i].dark:presets[i].light;break;}}}else if(accent&&accent.mode==="custom"&&typeof accent.value==="string"&&/^#[0-9a-fA-F]{6}$/.test(accent.value)){color=accent.value;}if(color){root.style.setProperty("--accent-base",color);var rgb=[parseInt(color.slice(1,3),16),parseInt(color.slice(3,5),16),parseInt(color.slice(5,7),16)];var toLinear=function(channel){var value=channel/255;return value<=0.04045?value/12.92:Math.pow((value+0.055)/1.055,2.4)};var luminance=0.2126*toLinear(rgb[0])+0.7152*toLinear(rgb[1])+0.0722*toLinear(rgb[2]);root.style.setProperty("--on-accent",luminance>0.45?"#000000":"#ffffff");}if(settings.background&&settings.background.hasImage&&typeof settings.background.url==="string"&&settings.background.url.indexOf("/api/appearance/background")===0){root.style.setProperty("--app-bg-image",'url("'+settings.background.url.replace(/"/g,"%22")+'")');}if(localStorage.getItem("${PRIVACY_STORAGE_KEY}")==="true"){root.dataset.privacy="true";}}catch(e){}})();`;
+export const APPEARANCE_BOOTSTRAP_SCRIPT = `(function(){try{var presets=${PRESETS_JSON};var raw=localStorage.getItem("${APPEARANCE_STORAGE_KEY}");var settings={theme:"system",frost:0.5,surfaceOpacity:0.9,frostMain:true,reducedTransparency:false,accent:{mode:"default"},background:{hasImage:false,url:null}};if(raw){try{var parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object"){if(parsed.theme==="light"||parsed.theme==="dark"||parsed.theme==="system"){settings.theme=parsed.theme;}if(typeof parsed.frost==="number"&&isFinite(parsed.frost)){settings.frost=Math.min(1,Math.max(0,parsed.frost));}if(typeof parsed.surfaceOpacity==="number"&&isFinite(parsed.surfaceOpacity)){settings.surfaceOpacity=Math.min(1,Math.max(0.5,parsed.surfaceOpacity));}if(typeof parsed.frostMain==="boolean"){settings.frostMain=parsed.frostMain;}if(typeof parsed.reducedTransparency==="boolean"){settings.reducedTransparency=parsed.reducedTransparency;}if(parsed.accent&&typeof parsed.accent==="object"){settings.accent=parsed.accent;}if(parsed.background&&typeof parsed.background==="object"){settings.background=parsed.background;}}}catch(e){}}var dark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;var resolved=settings.theme==="system"?(dark?"dark":"light"):settings.theme;var root=document.documentElement;root.dataset.theme=resolved;root.style.setProperty("--frost",String(settings.frost));root.style.setProperty("--surface-alpha",Math.round(settings.surfaceOpacity*100)+"%");root.dataset.frostMain=String(settings.frostMain);if(settings.reducedTransparency){root.dataset.reducedTransparency="true";}var accent=settings.accent;var color=null;if(accent&&accent.mode==="preset"){for(var i=0;i<presets.length;i++){if(presets[i].id===accent.value){color=resolved==="dark"?presets[i].dark:presets[i].light;break;}}}else if(accent&&accent.mode==="custom"&&typeof accent.value==="string"&&/^#[0-9a-fA-F]{6}$/.test(accent.value)){color=accent.value;}if(color){root.style.setProperty("--accent-base",color);var rgb=[parseInt(color.slice(1,3),16),parseInt(color.slice(3,5),16),parseInt(color.slice(5,7),16)];var toLinear=function(channel){var value=channel/255;return value<=0.04045?value/12.92:Math.pow((value+0.055)/1.055,2.4)};var luminance=0.2126*toLinear(rgb[0])+0.7152*toLinear(rgb[1])+0.0722*toLinear(rgb[2]);root.style.setProperty("--on-accent",luminance>0.45?"#000000":"#ffffff");}if(settings.background&&settings.background.hasImage&&typeof settings.background.url==="string"&&settings.background.url.indexOf("/api/appearance/background")===0){root.style.setProperty("--app-bg-image",'url("'+settings.background.url.replace(/"/g,"%22")+'")');}if(localStorage.getItem("${PRIVACY_STORAGE_KEY}")==="true"){root.dataset.privacy="true";}}catch(e){}})();`;

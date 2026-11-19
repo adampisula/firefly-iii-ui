@@ -10,6 +10,7 @@ Canonical task state below. QA preparation can start as child tasks after founda
 | --- | --- | --- | --- | --- | --- |
 | QA-01 | API/UI parity and cross-domain integration audit | done | FND-09; all CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-02 | Responsive, accessibility and visual acceptance | done | FND-10; all screen-owning CORE/AUTO/ANA/SYS tasks done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
+| QA-02-a | User-reported appearance, rail, budget-button, piggy-currency and assistant UX fixes | in_review | QA-02 | Kilo (deepseek agent) | 2026-11-19 22:21:00 UTC |
 | QA-03 | Financial precision, English formatting and temporal audit | done | all supported financial/preferences/report slices done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-04 | Security, isolation and destructive-operation audit | done | FND-05/08; SYS-04/05/07/08/09; all write surfaces done | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
 | QA-05 | Performance, resilience and deployment verification | done | FND-02; all runtime domains done; chosen hosting available | Kilo (deepseek agent) | 2026-11-11 21:33:00 UTC |
@@ -49,6 +50,17 @@ Newly ready tasks: none.
 - Light/dark/system, frost 0/.5/1 on scene, no-blur/forced-color/reduced-transparency/reduced-motion. Contrast checks against composited surfaces, 40px+ design controls/prefer 44px touch, visible focus and no color-only state.
 
 **Acceptance:** design-difference review recorded with approved intentional adaptations; WCAG AA violations and blocked journeys fixed, automated screenshots/a11y checks stable. Critical errors persistent, tooltips not sole labels, status/sign semantics and charts accessible. Representative Chromium/Firefox/WebKit checks on chosen supported browsers; inability to test physical devices disclosed and remaining signoff assigned.
+
+### QA-02-a — User-reported cosmetic and interaction fixes (in_review)
+
+Owner/session: Kilo (deepseek agent) | updated UTC: 2026-11-19 22:21:00 UTC  
+Status: implementation complete, automated checks pass, awaiting user visual/interaction confirmation. No backend change, custom image, DB access or inventory promotion.  
+Changes: added persisted `surfaceOpacity` (50–100%, default 90%) and `frostMain` appearance controls with first-paint bootstrap, server/local persistence, `--surface`/`--main-blur` glass tokens and a frosted main slab; primary buttons now use `--accent`/`--on-accent`; piggy mappings read top-level `currency_code`/`currency_decimal_places` and forms default to the primary/default currency; collapsed rail stacks brand/fold, centers 44px links and hides its scrollbar; assistant composer submits on Enter, Shift+Enter inserts a newline, coarse-pointer devices keep newline behavior, and assistant messages render GFM Markdown via `react-markdown`/`remark-gfm`.  
+Changed files: `src/lib/appearance.ts`, `src/lib/appearance-store.ts`, `src/lib/appearance/server-store.ts`, `src/components/appearance/appearance-controls.tsx`, `src/styles/tokens.css`, `src/components/shell/shell.module.css`, `src/components/ui/primitives.module.css`, `src/features/piggy-banks/service.ts`, `src/features/piggy-banks/piggy-forms.tsx`, `src/app/(app)/piggy-banks/page.tsx`, `src/app/(app)/piggy-banks/[id]/page.tsx`, `src/features/assistant/assistant-chat.tsx`, `src/features/assistant/assistant.module.css`, affected tests, `package.json`, `package-lock.json`.  
+Checks: `npm run typecheck` pass; `npm run lint` pass; `npm run test:unit` 114 passed; `npm run build` pass; `npm run test:browser` 54 passed (including appearance persistence, frost/opacity controls, axe and contrast suites).  
+Inventory: no status changes. `api.v1.piggy-banks.index/store/show/update` and `UI-CORE-09-01/03` remain verified/runtime-verified; `UI-CORE-09-02` remains implemented/static_not_runtime_verified because the positive-allocation bcsub backend defect is unchanged.  
+Remaining: user visual confirmation of the new glass/opacity controls, collapsed rail and assistant Markdown; physical-phone virtual-keyboard behavior was not exercised in this environment (coarse-pointer guard covered by code review only).  
+Next action: user reviews the running UI and confirms acceptance; then QA-02-a can move to `done`.
 
 ## QA-03 — Financial, English formatting and temporal invariants
 

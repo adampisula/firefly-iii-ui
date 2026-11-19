@@ -4,6 +4,7 @@ import {
   APPEARANCE_STORAGE_KEY,
   DEFAULT_APPEARANCE,
   clampFrost,
+  clampSurfaceOpacity,
   parseAppearance,
   parsePrivacy,
   resolveTheme,
@@ -47,6 +48,13 @@ test("appearance parsing defaults and clamps stored values", () => {
     { ...DEFAULT_APPEARANCE, frost: 0 },
   );
   assert.equal(clampFrost(Number.NaN), 0.5);
+  assert.equal(clampSurfaceOpacity(Number.NaN), 0.9);
+  assert.equal(clampSurfaceOpacity(0.2), 0.5);
+  assert.equal(clampSurfaceOpacity(1.7), 1);
+  assert.deepEqual(
+    parseAppearance(JSON.stringify({ surfaceOpacity: 2, frostMain: false })),
+    { ...DEFAULT_APPEARANCE, surfaceOpacity: 1, frostMain: false },
+  );
   assert.equal(parsePrivacy("true"), true);
   assert.equal(parsePrivacy("false"), false);
   assert.equal(parsePrivacy(null), false);
@@ -64,6 +72,14 @@ test("appearance theme resolution follows system preference", () => {
       frost: 0.25,
     }),
     /"frost":0.25/,
+  );
+  assert.match(
+    serializeAppearance({
+      ...DEFAULT_APPEARANCE,
+      surfaceOpacity: 1,
+      frostMain: false,
+    }),
+    /"surfaceOpacity":1/,
   );
   assert.equal(APPEARANCE_STORAGE_KEY, "ff.appearance");
 });

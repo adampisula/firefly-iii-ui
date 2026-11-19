@@ -18,6 +18,7 @@ function draft(overrides = {}) {
     objectGroupTitle: "",
     accountId: "1",
     currentAmount: "0",
+    currencyCode: "EUR",
     ...overrides,
   };
 }
@@ -33,20 +34,18 @@ test("piggy mapping keeps multi-account allocations and events", () => {
           current_amount: "250.00",
           percentage: 25,
           start_date: "2026-01-01",
+          currency_code: "SEK",
+          currency_decimal_places: 2,
           accounts: [
             {
-              id: "2",
+              account_id: "2",
               name: "Bank",
               current_amount: "200.00",
-              currency_code: "EUR",
-              currency_decimal_places: 2,
             },
             {
-              id: "3",
+              account_id: "3",
               name: "Cash",
               current_amount: "50.00",
-              currency_code: "EUR",
-              currency_decimal_places: 2,
             },
           ],
         },
@@ -54,6 +53,9 @@ test("piggy mapping keeps multi-account allocations and events", () => {
     ],
   });
   assert.equal(pigs[0].accounts.length, 2);
+  assert.equal(pigs[0].currencyCode, "SEK");
+  assert.equal(pigs[0].accounts[0].currencyCode, "SEK");
+  assert.equal(pigs[0].accounts[0].decimalPlaces, 2);
   assert.equal(pigs[0].percentage, 25);
   assert.equal(
     mapPiggyEvents({
@@ -82,6 +84,7 @@ test("piggy validation enforces target, dates, account and reserved amount", () 
       targetDate: "bad",
       accountId: "",
       currentAmount: "-1",
+      currencyCode: "",
     }),
   );
   assert.equal(bad.ok, false);
@@ -92,6 +95,7 @@ test("piggy validation enforces target, dates, account and reserved amount", () 
     "targetDate",
     "accountId",
     "currentAmount",
+    "currencyCode",
   ])
     assert.ok(bad.errors[key]);
   assert.equal(
@@ -121,6 +125,7 @@ test("piggy payload preserves other account allocations", () => {
     ],
   );
   assert.equal(payload.target_amount, "1000");
+  assert.equal(payload.transaction_currency_code, "EUR");
   assert.equal(payload.target_date, "2026-12-31");
   assert.deepEqual(payload.accounts, [
     { account_id: "3", current_amount: "50" },

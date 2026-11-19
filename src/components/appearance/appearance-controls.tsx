@@ -234,10 +234,46 @@ export function AppearanceControls({
           }
         />
         <p className="muted-note">
-          Frost changes surface translucency only. Text contrast is preserved at
-          both extremes.
+          Frost changes how strongly the scene is blurred behind glass surfaces.
+          Text contrast is preserved at both extremes.
         </p>
       </div>
+
+      <div className="appearance-field">
+        <label className="field-label" htmlFor={`${id}-surface-opacity`}>
+          Background opacity: {Math.round(settings.surfaceOpacity * 100)}%
+        </label>
+        <input
+          className="range"
+          id={`${id}-surface-opacity`}
+          type="range"
+          min={0.5}
+          max={1}
+          step={0.02}
+          value={settings.surfaceOpacity}
+          onChange={(event) =>
+            onChange({
+              ...settings,
+              surfaceOpacity: Number(event.target.value),
+            })
+          }
+        />
+        <p className="muted-note">
+          Raise this when the scene behind the main window distracts you. At
+          100% the main window is fully opaque.
+        </p>
+      </div>
+
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          checked={settings.frostMain}
+          onChange={(event) =>
+            onChange({ ...settings, frostMain: event.target.checked })
+          }
+        />
+        <span>Frost the main window</span>
+      </label>
 
       <label className="checkbox-row">
         <input

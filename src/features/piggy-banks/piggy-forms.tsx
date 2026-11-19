@@ -33,10 +33,24 @@ export function PiggyForm({
 }: {
   piggy?: PiggyBankRecord;
   accounts: readonly { id: string; name: string; type: string }[];
-  currencies?: readonly { code: string; name: string }[];
+  currencies?: readonly { code: string; name: string; default?: boolean }[];
 }) {
   const [state, formAction, pending] = useActionState(savePiggyAction, INITIAL);
   const primary = piggy?.accounts[0];
+  const defaultCurrency =
+    currencies.find((currency) => currency.default)?.code ??
+    currencies[0]?.code ??
+    "EUR";
+  const primaryCurrency =
+    primary?.currencyCode || piggy?.currencyCode || defaultCurrency;
+  const currencyOptions = currencies.length
+    ? currencies
+    : [{ code: primaryCurrency, name: primaryCurrency }];
+  const selectableCurrencies = currencyOptions.some(
+    (currency) => currency.code === primaryCurrency,
+  )
+    ? currencyOptions
+    : [{ code: primaryCurrency, name: primaryCurrency }, ...currencyOptions];
   return (
     <form action={formAction} className="form-stack">
       {piggy ? <input type="hidden" name="piggy_id" value={piggy.id} /> : null}
@@ -156,12 +170,9 @@ export function PiggyForm({
             className="select"
             id="piggy-currency"
             name="currency_code"
-            defaultValue={primary?.currencyCode ?? currencies[0]?.code ?? "EUR"}
+            defaultValue={primaryCurrency}
           >
-            {(currencies.length > 0
-              ? currencies
-              : [{ code: "EUR", name: "Euro" }]
-            ).map((currency) => (
+            {selectableCurrencies.map((currency) => (
               <option key={currency.code} value={currency.code}>
                 {currency.name} ({currency.code})
               </option>
