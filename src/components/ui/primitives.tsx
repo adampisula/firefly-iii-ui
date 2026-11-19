@@ -230,10 +230,17 @@ export function MoneyDisplay({
       </output>
     );
   }
-  const formatted = formatEnglishMoney(
-    { amount, code: currency, decimalPlaces },
-    locale,
-  );
+  let formatted: string;
+  try {
+    formatted = formatEnglishMoney(
+      { amount, code: currency, decimalPlaces },
+      locale,
+    );
+  } catch {
+    formatted = currency
+      ? `${amount} ${currency}`
+      : `${amount} (currency unknown)`;
+  }
   return <output className={styles.money}>{formatted}</output>;
 }
 

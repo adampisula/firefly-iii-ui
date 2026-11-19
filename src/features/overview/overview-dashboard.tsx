@@ -266,7 +266,7 @@ export function OverviewDashboard({
                     <td>
                       <MoneyDisplay
                         amount={account.currentBalance}
-                        currency={account.currencyCode}
+                        currency={account.currencyCode || "EUR"}
                         decimalPlaces={account.decimalPlaces}
                       />
                     </td>
@@ -340,7 +340,7 @@ export function OverviewDashboard({
                       <td>
                         <MoneyDisplay
                           amount={journal.amount}
-                          currency={journal.currencyCode}
+                          currency={journal.currencyCode || "EUR"}
                           decimalPlaces={journal.decimalPlaces}
                         />
                       </td>
@@ -402,13 +402,13 @@ export function OverviewDashboard({
                   <span className="overview-list-amount">
                     <MoneyDisplay
                       amount={bill.amountMin}
-                      currency={bill.currencyCode}
+                      currency={bill.currencyCode || "EUR"}
                       decimalPlaces={bill.decimalPlaces}
                     />
                     {" – "}
                     <MoneyDisplay
                       amount={bill.amountMax}
-                      currency={bill.currencyCode}
+                      currency={bill.currencyCode || "EUR"}
                       decimalPlaces={bill.decimalPlaces}
                     />
                   </span>
@@ -442,7 +442,7 @@ export function OverviewDashboard({
                     label={piggy.name}
                     current={account?.currentAmount ?? piggy.currentAmount}
                     target={piggy.targetAmount || null}
-                    currency={account?.currencyCode ?? "EUR"}
+                    currency={account?.currencyCode || "EUR"}
                     decimalPlaces={account?.decimalPlaces ?? 2}
                     percentage={piggy.percentage}
                     detail={
