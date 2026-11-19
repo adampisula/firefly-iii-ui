@@ -7,7 +7,12 @@ import {
   type TransactionGroupView,
 } from "@/features/transactions/service";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay, Status } from "@/components/ui/primitives";
+import {
+  FilterBar,
+  MoneyDisplay,
+  PageHeader,
+  Status,
+} from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -131,22 +136,18 @@ export default async function TransactionsPage({
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Transactions</p>
-        <h1>Transaction history</h1>
-        <p className="lede">
-          Groups and individual journals keep distinct identities. Split totals
-          are not summed again in the frontend.
-        </p>
-        <div className="button-row">
+      <PageHeader
+        eyebrow="Transactions"
+        title="Transaction history"
+        lede="Groups and individual journals keep distinct identities. Split totals are not summed again in the frontend."
+        actions={
           <Link className="button-link" href="/transactions/new">
             New transaction
           </Link>
-        </div>
-      </section>
+        }
+      />
 
-      <section className="panel">
-        <h2>Filters</h2>
+      <FilterBar>
         <form className="search-form" action="/transactions" method="get">
           <div className="field-group">
             <label className="field-label" htmlFor="tx-type">
@@ -196,7 +197,7 @@ export default async function TransactionsPage({
             All time, all default types
           </Link>
         </form>
-      </section>
+      </FilterBar>
 
       <section className="panel">
         <h2>Results</h2>

@@ -8,6 +8,7 @@ import {
   UserForm,
 } from "@/features/administration-users/user-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -66,14 +67,11 @@ export default async function AdminUsersPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Owner administration</p>
-        <h1>Users, roles and configuration</h1>
-        <p className="lede">
-          Owner-only user and system configuration controls. Invitation emails
-          and manual update checks have no API and remain residual.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Owner administration"
+        title="Users, roles and configuration"
+        lede="Owner-only user and system configuration controls. Invitation emails and manual update checks have no API and remain residual."
+      />
       <section className="panel">
         <h2>Users</h2>
         {users.length === 0 ? (

@@ -14,6 +14,9 @@ test("the application shell renders the English connection view", async ({
   await expect(
     page.getByRole("button", { name: "Connect account" }),
   ).toBeVisible();
+  await expect(page.getByText("Safe to spend today")).toHaveCount(0);
+  await expect(page.getByText("Your cards")).toHaveCount(0);
+  await expect(page.getByText("Ines Okafor")).toHaveCount(0);
 });
 
 test("the connection shell passes axe accessibility checks", async ({

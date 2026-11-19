@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listAttachments } from "@/features/attachments/service";
 import { CreateAttachmentForm } from "@/features/attachments/attachment-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,14 +39,11 @@ export default async function AttachmentsPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Attachments</p>
-        <h1>Attachments</h1>
-        <p className="lede">
-          Metadata, binary upload, download and deletion through existing
-          attachment operations. Files never pass through browser storage.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Attachments"
+        title="Attachments"
+        lede="Metadata, binary upload, download and deletion through existing attachment operations. Files never pass through browser storage."
+      />
       <section className="panel">
         <h2>Attachment list</h2>
         {attachments.length === 0 ? (

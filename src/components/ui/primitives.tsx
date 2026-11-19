@@ -588,6 +588,16 @@ export function Dialog({
     if (open && !dialog.open) dialog.showModal();
     if (!open && dialog.open) dialog.close();
   }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onOpenChange(false);
+    };
+    window.addEventListener("keydown", handleEscape, true);
+    return () => window.removeEventListener("keydown", handleEscape, true);
+  }, [open, onOpenChange]);
   return (
     <dialog
       ref={dialogRef}
@@ -596,6 +606,12 @@ export function Dialog({
       onCancel={(event) => {
         event.preventDefault();
         onOpenChange(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          onOpenChange(false);
+        }
       }}
       onClose={() => {
         if (open) onOpenChange(false);
@@ -774,6 +790,299 @@ export function ChartDataTable<Row extends Record<string, string | number>>({
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+export function PageHeader({
+  eyebrow,
+  title,
+  lede,
+  actions,
+}: {
+  eyebrow?: string;
+  title: string;
+  lede?: ReactNode;
+  actions?: ReactNode;
+}) {
+  return (
+    <header className={styles.pageHeader}>
+      <div className={styles.pageHeaderText}>
+        {eyebrow ? <p className={styles.pageEyebrow}>{eyebrow}</p> : null}
+        <h1>{title}</h1>
+        {lede ? <div className={styles.pageLede}>{lede}</div> : null}
+      </div>
+      {actions ? <div className={styles.pageActions}>{actions}</div> : null}
+    </header>
+  );
+}
+
+export function StatGrid({ children }: { children: ReactNode }) {
+  return <div className={styles.statGrid}>{children}</div>;
+}
+
+export function StatTile({
+  label,
+  value,
+  hint,
+  tone = "neutral",
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  tone?: "neutral" | "good" | "warn";
+}) {
+  return (
+    <div className={styles.statTile} data-tone={tone}>
+      <span className={styles.statLabel}>{label}</span>
+      <strong className={styles.statValue}>{value}</strong>
+      {hint ? <span className={styles.statHint}>{hint}</span> : null}
+    </div>
+  );
+}
+
+export interface ChartPoint {
+  label: string;
+  amount: string;
+  currency: string;
+  decimalPlaces: number;
+}
+
+function chartText(point: ChartPoint): string {
+  return `${point.amount} ${point.currency}`;
+}
+
+function ChartTable({
+  caption,
+  points,
+}: {
+  caption: string;
+  points: readonly ChartPoint[];
+}) {
+  return (
+    <ChartDataTable
+      caption={caption}
+      columns={[
+        { key: "label", label: "Period" },
+        { key: "value", label: "Amount" },
+      ]}
+      rows={points.map((point) => ({
+        label: point.label,
+        value: chartText(point),
+      }))}
+    />
+  );
+}
+
+export function LineChart({
+  title,
+  summary,
+  points,
+}: {
+  title: string;
+  summary: string;
+  points: readonly ChartPoint[];
+}) {
+  const { privacy } = useOptionalPrivacy();
+  if (privacy) {
+    return (
+      <div className={styles.chartFrame}>
+        <p className={styles.chartTitle}>{title}</p>
+        <p className={styles.chartEmpty}>Amounts are hidden by privacy mode.</p>
+      </div>
+    );
+  }
+  if (points.length === 0) {
+    return (
+      <div className={styles.chartFrame}>
+        <p className={styles.chartTitle}>{title}</p>
+        <p className={styles.chartEmpty}>
+          No chart data is reported for this range.
+        </p>
+      </div>
+    );
+  }
+  const values = points.map((point) => Number(point.amount));
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const line = points
+    .map((point, index) => {
+      const x = points.length === 1 ? 50 : (index / (points.length - 1)) * 100;
+      const y = 94 - ((Number(point.amount) - min) / span) * 82;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    })
+    .join(" ");
+  return (
+    <div className={styles.chartFrame}>
+      <p className={styles.chartTitle}>{title}</p>
+      <p className={styles.chartSummary}>{summary}</p>
+      <div
+        className={styles.lineChart}
+        role="img"
+        aria-label={`${title}. ${summary}`}
+      >
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <polyline
+            points={line}
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="2.5"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
+      <ChartTable caption={title} points={points} />
+    </div>
+  );
+}
+
+export function BarChart({
+  title,
+  summary,
+  points,
+}: {
+  title: string;
+  summary: string;
+  points: readonly ChartPoint[];
+}) {
+  const { privacy } = useOptionalPrivacy();
+  if (privacy) {
+    return (
+      <div className={styles.chartFrame}>
+        <p className={styles.chartTitle}>{title}</p>
+        <p className={styles.chartEmpty}>Amounts are hidden by privacy mode.</p>
+      </div>
+    );
+  }
+  if (points.length === 0) {
+    return (
+      <div className={styles.chartFrame}>
+        <p className={styles.chartTitle}>{title}</p>
+        <p className={styles.chartEmpty}>
+          No chart data is reported for this range.
+        </p>
+      </div>
+    );
+  }
+  const max = Math.max(
+    ...points.map((point) => Math.abs(Number(point.amount))),
+    1,
+  );
+  return (
+    <div className={styles.chartFrame}>
+      <p className={styles.chartTitle}>{title}</p>
+      <p className={styles.chartSummary}>{summary}</p>
+      <div
+        className={styles.barChart}
+        role="img"
+        aria-label={`${title}. ${summary}`}
+      >
+        {points.map((point) => (
+          <div className={styles.barColumn} key={point.label}>
+            <span className={styles.barValue}>
+              <MoneyDisplay
+                amount={point.amount}
+                currency={point.currency}
+                decimalPlaces={point.decimalPlaces}
+              />
+            </span>
+            <span
+              className={styles.bar}
+              style={{
+                height: `${Math.max(6, (Math.abs(Number(point.amount)) / max) * 100)}%`,
+              }}
+            />
+            <span className={styles.barLabel}>{point.label}</span>
+          </div>
+        ))}
+      </div>
+      <ChartTable caption={title} points={points} />
+    </div>
+  );
+}
+
+export function ProgressRow({
+  label,
+  current,
+  target,
+  currency,
+  decimalPlaces,
+  percentage,
+  detail,
+}: {
+  label: string;
+  current: string;
+  target?: string | null;
+  currency: string;
+  decimalPlaces: number;
+  percentage?: number | null;
+  detail?: string;
+}) {
+  const percent =
+    typeof percentage === "number"
+      ? Math.min(100, Math.max(0, percentage))
+      : target && Number(target) > 0
+        ? Math.min(100, Math.max(0, (Number(current) / Number(target)) * 100))
+        : null;
+  return (
+    <div className={styles.progressRow}>
+      <div className={styles.progressHead}>
+        <span className={styles.progressLabel}>{label}</span>
+        <span className={styles.progressAmounts}>
+          <MoneyDisplay
+            amount={current}
+            currency={currency}
+            decimalPlaces={decimalPlaces}
+          />
+          {target ? (
+            <>
+              {" / "}
+              <MoneyDisplay
+                amount={target}
+                currency={currency}
+                decimalPlaces={decimalPlaces}
+              />
+            </>
+          ) : null}
+        </span>
+      </div>
+      {percent !== null ? (
+        <div
+          className={styles.progressTrack}
+          role="progressbar"
+          aria-label={label}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(percent)}
+        >
+          <span style={{ width: `${percent}%` }} />
+        </div>
+      ) : null}
+      {detail ? <p className={styles.progressDetail}>{detail}</p> : null}
+    </div>
+  );
+}
+
+export function FilterBar({ children }: { children: ReactNode }) {
+  return <div className={styles.filterBar}>{children}</div>;
+}
+
+export function EmptyState({
+  title,
+  children,
+}: {
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className={styles.emptyState}>
+      <strong>{title}</strong>
+      {children ? <div>{children}</div> : null}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import {
   RuleGroupForm,
 } from "@/features/rules/rule-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { Status } from "@/components/ui/primitives";
+import { PageHeader, Status } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -46,17 +46,16 @@ export default async function RulesPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Rules</p>
-        <h1>Rules and rule groups</h1>
-        <p className="lede">
-          Trigger/action rules and manual execution. Rules can change financial
-          data; execution requires explicit confirmation.
-        </p>
-        <Link className="button-link" href="/rules/new">
-          Create rule
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Rules"
+        title="Rules and rule groups"
+        lede="Trigger/action rules and manual execution. Rules can change financial data; execution requires explicit confirmation."
+        actions={
+          <Link className="button-link" href="/rules/new">
+            Create rule
+          </Link>
+        }
+      />
       <section className="panel">
         <h2>Rule groups</h2>
         {groups.length === 0 ? (

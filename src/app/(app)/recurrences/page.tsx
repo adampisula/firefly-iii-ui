@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listRecurrences } from "@/features/recurrences/service";
 import { RecurrenceForm } from "@/features/recurrences/recurrence-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 function mapAccounts(
@@ -76,14 +77,11 @@ export default async function RecurrencesPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Recurrences</p>
-        <h1>Recurring transactions</h1>
-        <p className="lede">
-          Templates, latest generated date and execution. Schedule
-          suggestions/calendar remain residual.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Recurrences"
+        title="Recurring transactions"
+        lede="Templates, latest generated date and execution. Schedule suggestions/calendar remain residual."
+      />
       <section className="panel">
         <h2>Recurrences</h2>
         {recurrences.length === 0 ? (

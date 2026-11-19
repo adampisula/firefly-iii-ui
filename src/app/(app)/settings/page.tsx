@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getCurrentAuth } from "@/lib/auth/service";
 import { getServerEnvironment } from "@/lib/server-env";
-import { Status } from "@/components/ui/primitives";
+import { PageHeader, Status } from "@/components/ui/primitives";
+import { SettingsAppearance } from "@/components/appearance/settings-appearance";
 
 export const dynamic = "force-dynamic";
 
@@ -22,13 +23,17 @@ export default async function SettingsPage() {
 
   return (
     <div className="page-stack">
+      <PageHeader
+        eyebrow="Settings"
+        title="Connection and appearance"
+        lede="Appearance settings and the background image sync to this user profile through the frontend server. Financial data and tokens are never written to browser storage."
+        actions={
+          <Link className="text-link" href="/">
+            Return to overview
+          </Link>
+        }
+      />
       <section className="panel">
-        <p className="eyebrow">Settings</p>
-        <h1>Connection and appearance</h1>
-        <p>
-          Appearance is stored in this browser only. Session and financial data
-          are never written to browser storage.
-        </p>
         <p>
           {user ? (
             <Status kind="success">Connected as {user.email}</Status>
@@ -37,13 +42,19 @@ export default async function SettingsPage() {
           )}
         </p>
         <p className="muted-note">
-          Use the Appearance button in the header to change theme, glass frost,
-          reduced transparency and amount privacy. The date range selector keeps
-          its value in the page URL.
+          The date range selector keeps its value in the page URL. Use the
+          privacy control in the header to hide amounts everywhere.
         </p>
-        <Link className="text-link" href="/">
-          Return to overview
-        </Link>
+      </section>
+
+      <section className="panel" id="appearance">
+        <h2>Appearance</h2>
+        <p className="lede">
+          Choose a theme, accent and background. Accent colors are checked for
+          readable contrast; the custom background is compressed here before it
+          is saved to your profile.
+        </p>
+        <SettingsAppearance />
       </section>
 
       <section className="panel">

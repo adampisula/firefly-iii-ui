@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listCategories } from "@/features/classification/service";
 import { CategoryForm } from "@/features/classification/class-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,19 +39,21 @@ export default async function CategoriesPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Categories</p>
-        <h1>Categories</h1>
-        <p className="lede">
-          Classification values used by transactions and budgets.
-        </p>
-        <Link className="text-link" href="/tags">
-          Manage tags
-        </Link>{" "}
-        <Link className="text-link" href="/object-groups">
-          Object groups
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Categories"
+        title="Categories"
+        lede="Classification values used by transactions and budgets."
+        actions={
+          <>
+            <Link className="text-link" href="/tags">
+              Manage tags
+            </Link>
+            <Link className="text-link" href="/object-groups">
+              Object groups
+            </Link>
+          </>
+        }
+      />
       <section className="panel">
         <h2>Category list</h2>
         {categories.length === 0 ? (

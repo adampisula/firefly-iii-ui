@@ -50,18 +50,30 @@ test("appearance choices persist locally and apply before reload", async ({
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
 
-  await page.getByRole("button", { name: "Appearance" }).last().click();
+  await page
+    .getByRole("button", { name: "Appearance", exact: true })
+    .last()
+    .click();
   const dialog = page.getByRole("dialog", { name: "Appearance" });
   await expect(dialog).toBeVisible();
 
   await dialog.getByLabel("Theme").selectOption("dark");
   await dialog.getByLabel("Use opaque surfaces (reduced transparency)").check();
+  await dialog.getByRole("button", { name: "Blue" }).click();
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute(
     "data-reduced-transparency",
     "true",
   );
+  const accent = await page.evaluate(() =>
+    document.documentElement.style.getPropertyValue("--accent-base"),
+  );
+  expect(accent).toBe("#93c5fd");
+
+  await dialog.getByLabel("Custom hex").fill("#ffff00");
+  await dialog.getByRole("button", { name: "Apply" }).click();
+  await expect(dialog.getByText(/too light/i)).toBeVisible();
 
   const stored = await page.evaluate(() =>
     JSON.parse(window.localStorage.getItem("ff.appearance") ?? "{}"),
@@ -69,6 +81,7 @@ test("appearance choices persist locally and apply before reload", async ({
   expect(stored).toMatchObject({
     theme: "dark",
     reducedTransparency: true,
+    accent: { mode: "preset", value: "blue" },
   });
 
   await page.reload();

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listObjectGroups } from "@/features/classification/service";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -37,14 +38,11 @@ export default async function ObjectGroupsPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Object groups</p>
-        <h1>Object groups</h1>
-        <p className="lede">
-          Rename, reorder and delete groups. There is no standalone create
-          route; groups are created through supported resource semantics.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Object groups"
+        title="Object groups"
+        lede="Rename, reorder and delete groups. There is no standalone create route; groups are created through supported resource semantics."
+      />
       <section className="panel">
         <h2>Groups</h2>
         {groups.length === 0 ? (

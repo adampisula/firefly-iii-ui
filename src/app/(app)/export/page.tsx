@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getServerEnvironment } from "@/lib/server-env";
 import { getCurrentAuth } from "@/lib/auth/service";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 const EXPORTS = [
@@ -31,19 +32,18 @@ export default async function ExportPage() {
   const backend = backendPublicUrlOrNull();
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Exports</p>
-        <h1>CSV exports and Data Importer</h1>
-        <p className="lede">
-          Download supported CSV families directly from Firefly. Authentication
-          stays server-side.
-        </p>
-        {!auth.session ? (
+      <PageHeader
+        eyebrow="Exports"
+        title="CSV exports and Data Importer"
+        lede="Download supported CSV families directly from Firefly. Authentication stays server-side."
+      />
+      {!auth.session ? (
+        <section className="panel">
           <p className="muted-note">
             Connect a Firefly account to download exports.
           </p>
-        ) : null}
-      </section>
+        </section>
+      ) : null}
       <section className="panel">
         <h2>CSV downloads</h2>
         <ul className="link-list">

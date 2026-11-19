@@ -8,7 +8,12 @@ import {
 import { AccountSearchPanel } from "@/features/search/account-search-panel";
 import { AutocompleteExplorer } from "@/features/search/autocomplete-explorer";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay, Status } from "@/components/ui/primitives";
+import {
+  FilterBar,
+  MoneyDisplay,
+  PageHeader,
+  Status,
+} from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -92,13 +97,12 @@ export default async function SearchPage({
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Search</p>
-        <h1>Find transactions and entities</h1>
-        <p className="lede">
-          Transaction search uses Firefly&apos;s grammar. Autocomplete lookups
-          cover every supported entity family.
-        </p>
+      <PageHeader
+        eyebrow="Search"
+        title="Find transactions and entities"
+        lede="Transaction search uses Firefly's grammar. Autocomplete lookups cover every supported entity family."
+      />
+      <FilterBar>
         <form
           className="search-form"
           action="/search"
@@ -128,7 +132,7 @@ export default async function SearchPage({
             Query: <code>{query}</code>
           </p>
         ) : null}
-      </section>
+      </FilterBar>
 
       <section className="panel">
         <h2>Query syntax</h2>

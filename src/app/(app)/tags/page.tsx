@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listTags } from "@/features/classification/service";
 import { TagForm } from "@/features/classification/class-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,17 +39,16 @@ export default async function TagsPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Tags</p>
-        <h1>Tags</h1>
-        <p className="lede">
-          Tag names support Unicode and special characters. Individual deletion
-          is supported; mass tag deletion has no verified API.
-        </p>
-        <Link className="text-link" href="/categories">
-          Categories
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Tags"
+        title="Tags"
+        lede="Tag names support Unicode and special characters. Individual deletion is supported; mass tag deletion has no verified API."
+        actions={
+          <Link className="text-link" href="/categories">
+            Categories
+          </Link>
+        }
+      />
       <section className="panel">
         <h2>Tag list</h2>
         {tags.length === 0 ? (

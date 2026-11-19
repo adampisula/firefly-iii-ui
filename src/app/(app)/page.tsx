@@ -4,7 +4,10 @@ import { loadOnboardingState } from "@/features/onboarding/service";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { getServerEnvironment } from "@/lib/server-env";
 import { ErrorState } from "@/components/shell/states";
+import { EmptyState, PageHeader, Status } from "@/components/ui/primitives";
+import { rangeFromKey } from "@/features/analysis/service";
 import { OverviewDashboard } from "@/features/overview/overview-dashboard";
+import { loadOverview } from "@/features/overview/service";
 
 export const dynamic = "force-dynamic";
 
@@ -18,52 +21,39 @@ function backendPublicUrlOrNull(): string | null {
   }
 }
 
-export default async function OverviewPage() {
+function requestedRange(value: string | string[] | undefined): string {
+  return typeof value === "string" ? value : "this-month";
+}
+
+export default async function OverviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const context = await getSessionApiContext().catch(() => null);
   const backendPublicUrl = backendPublicUrlOrNull();
 
   if (!context) {
     return (
       <div className="page-stack">
+        <PageHeader
+          eyebrow="Connect your account"
+          title="Your finances, under your control."
+          lede="Firefly runs against your own Firefly III 6.7.9 installation. Connect with a personal access token to see real balances, activity, budgets and reports. No sample balances are shown."
+        />
         <section className="panel">
-          <p className="eyebrow">Connect your account</p>
-          <h1
-            style={{
-              fontSize: "clamp(26px, 2.5vw, 36px)",
-              margin: "8px 0 14px",
-              letterSpacing: "-0.025em",
-            }}
-          >
-            Your finances, under your control.
-          </h1>
-          <p
-            className="lede"
-            style={{
-              fontSize: "15px",
-              color: "var(--muted)",
-              maxWidth: "56ch",
-              marginBottom: "18px",
-            }}
-          >
-            Firefly runs against your own Firefly III 6.7.9 installation.
-            Connect with a personal access token to start safe, API-backed
-            setup.
-          </p>
           <ConnectForm backendPublicUrl={backendPublicUrl} />
         </section>
-
-        <OverviewDashboard userName="Ines" balanceTotal="$29,253.82" />
-
         <section className="panel">
-          <div className="chead">
-            <div className="chead__text">
-              <h2>What this frontend does not do</h2>
-              <p>
-                It does not execute bank payments, issue cards or share
-                household finances. Identity management stays in the native
-                Firefly backend.
-              </p>
-            </div>
+          <h2>What this frontend does not do</h2>
+          <p>
+            It does not execute bank payments, issue cards or share household
+            finances. Identity management stays in the native Firefly backend.
+          </p>
+          <div className="button-row">
+            <Status kind="neutral">API-backed</Status>
+            <Status kind="neutral">Separate native identity</Status>
+            <Status kind="neutral">Decimal amounts preserved</Status>
           </div>
         </section>
       </div>
@@ -108,9 +98,26 @@ export default async function OverviewPage() {
     redirect("/setup");
   }
 
-  const userEmail = context.auth.session.user.email;
-  const userName = userEmail ? userEmail.split("@")[0] : "Ines";
-  const capitalName = userName.charAt(0).toUpperCase() + userName.slice(1);
+  const rangeKey = requestedRange((await searchParams).range);
+  const range = rangeFromKey(rangeKey);
+  let overview;
+  try {
+    overview = await loadOverview(context.client, range);
+  } catch {
+    return (
+      <ErrorState title="Overview could not be loaded">
+        <p>Check the connection and try again.</p>
+        <EmptyState title="No financial data was changed">
+          This view only reads the existing Firefly API.
+        </EmptyState>
+      </ErrorState>
+    );
+  }
 
-  return <OverviewDashboard userName={capitalName} balanceTotal="$29,253.82" />;
+  return (
+    <OverviewDashboard
+      data={overview}
+      userEmail={context.auth.session.user.email}
+    />
+  );
 }

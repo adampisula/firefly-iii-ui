@@ -19,13 +19,17 @@ import {
 import type { AppearanceSettings } from "@/lib/appearance";
 import {
   applyAppearance,
+  clearAppearanceCache,
   getAppearanceServerSnapshot,
   getAppearanceSnapshot,
+  hydrateAppearanceFromServer,
+  saveAppearance,
   subscribeDisplayPreferences,
   writeAppearance,
 } from "@/lib/appearance-store";
 import { Button, Dialog, Status } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { AppearanceControls } from "@/components/appearance/appearance-controls";
 import { usePrivacy } from "./privacy-context";
 import styles from "./shell.module.css";
 
@@ -93,66 +97,7 @@ function AppearanceDialog({
 }) {
   return (
     <Dialog open={open} title="Appearance" onOpenChange={onOpenChange}>
-      <div className={styles.appearanceForm}>
-        <div className={styles.field}>
-          <label className={styles.fieldLabel} htmlFor="appearance-theme">
-            Theme
-          </label>
-          <select
-            className={styles.select}
-            id="appearance-theme"
-            value={settings.theme}
-            onChange={(event) =>
-              onChange({
-                ...settings,
-                theme: event.target.value as AppearanceSettings["theme"],
-              })
-            }
-          >
-            <option value="system">Match system</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-        <div className={styles.field}>
-          <label className={styles.fieldLabel} htmlFor="appearance-frost">
-            Glass frost: {Math.round(settings.frost * 100)}%
-          </label>
-          <input
-            className={styles.range}
-            id="appearance-frost"
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={settings.frost}
-            onChange={(event) =>
-              onChange({ ...settings, frost: Number(event.target.value) })
-            }
-          />
-          <p className={styles.fieldHint}>
-            Frost changes surface translucency only. Text contrast is preserved
-            at both extremes.
-          </p>
-        </div>
-        <label className={styles.checkboxRow}>
-          <input
-            type="checkbox"
-            checked={settings.reducedTransparency}
-            onChange={(event) =>
-              onChange({
-                ...settings,
-                reducedTransparency: event.target.checked,
-              })
-            }
-          />
-          <span>Use opaque surfaces (reduced transparency)</span>
-        </label>
-        <p className={styles.fieldHint}>
-          Appearance preferences are stored in this browser only. Financial data
-          is never stored in browser storage.
-        </p>
-      </div>
+      <AppearanceControls settings={settings} onChange={onChange} compact />
     </Dialog>
   );
 }
@@ -171,13 +116,14 @@ function UserMenu({
     setWorking(true);
     try {
       await fetch("/api/auth/session", { method: "DELETE" });
+      clearAppearanceCache();
       router.refresh();
     } finally {
       setWorking(false);
     }
   };
 
-  const initials = user ? user.email.slice(0, 2).toUpperCase() : "IO";
+  const initials = user ? user.email.slice(0, 2).toUpperCase() : "FF";
 
   return (
     <details className={styles.userMenu}>
@@ -191,10 +137,12 @@ function UserMenu({
       </summary>
       <div className={styles.userMenuDropdown}>
         <p className={styles.userMenuHeader}>
-          <strong>{user ? user.email : "Ines Okafor"}</strong>
+          <strong>{user ? user.email : "Not connected"}</strong>
           <br />
           <span className={styles.userMenuRole}>
-            {user?.role ?? "Okafor–Lindqvist home · Owner"}
+            {user
+              ? (user.role ?? "Connected session")
+              : "Connect to use Firefly"}
           </span>
         </p>
         <p className={styles.userMenuNote}>
@@ -257,6 +205,25 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
   const [railCollapsed, setRailCollapsed] = useState(false);
 
   useEffect(() => {
+    if (user) {
+      void hydrateAppearanceFromServer();
+      return;
+    }
+    const current = getAppearanceSnapshot();
+    if (current.background.hasImage) {
+      writeAppearance({
+        ...current,
+        background: {
+          hasImage: false,
+          updatedAt: null,
+          url: null,
+          mime: null,
+        },
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     if (settings.theme !== "system") return;
     const listener = () => applyAppearance(settings);
@@ -265,7 +232,8 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
   }, [settings]);
 
   const updateSettings = (next: AppearanceSettings) => {
-    writeAppearance(next);
+    if (user) void saveAppearance(next);
+    else writeAppearance(next);
   };
 
   const activeLink = findNavLinkByPath(pathname);
@@ -281,9 +249,9 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
     })),
   }));
 
-  const userInitials = user ? user.email.slice(0, 2).toUpperCase() : "IO";
-  const userName = user ? user.email.split("@")[0] : "Ines Okafor";
-  const userSub = user ? (user.role ?? "Owner") : "ines@okafor-lindqvist.fa...";
+  const userInitials = user ? user.email.slice(0, 2).toUpperCase() : "FF";
+  const userName = user ? user.email.split("@")[0] : "Not connected";
+  const userSub = user ? (user.role ?? "Connected") : "Connect an account";
 
   return (
     <div className={styles.frame}>
@@ -299,13 +267,11 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
           <div className={styles.railTop}>
             <Link className={styles.railBrand} href="/">
               <span className={styles.brandMark} aria-hidden="true">
-                <Icon name="verdelo" size={22} />
+                <Icon name="grid" size={22} />
               </span>
               <div className={styles.brandText}>
-                <b className={styles.brandTitle}>Verdelo</b>
-                <small className={styles.brandSubtitle}>
-                  Okafor–Lindqvist home
-                </small>
+                <b className={styles.brandTitle}>Firefly</b>
+                <small className={styles.brandSubtitle}>Personal finance</small>
               </div>
             </Link>
             <button
@@ -337,9 +303,7 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                           <Icon name={getNavIcon(link.id)} size={18} />
                         </span>
                         <span className={styles.navLabel}>{link.label}</span>
-                        {link.id === "transactions" ? (
-                          <span className={styles.navCount}>1</span>
-                        ) : link.status === "planned" && !link.active ? (
+                        {link.status === "planned" && !link.active ? (
                           <span className={styles.navPlanned}>Soon</span>
                         ) : null}
                       </Link>
@@ -349,12 +313,6 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
               </div>
             ))}
           </nav>
-
-          <div className={styles.safeCard}>
-            <small>Safe to spend today</small>
-            <b>$97</b>
-            <span>$269 of bills still due · 19 days left</span>
-          </div>
 
           <div className={styles.userProfile}>
             <span className={styles.userAvatar} aria-hidden="true">
@@ -372,29 +330,39 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
           <header className={styles.mobileHeader}>
             <Link className={styles.mobileBrand} href="/">
               <span className={styles.brandMark} aria-hidden="true">
-                <Icon name="verdelo" size={18} />
+                <Icon name="grid" size={18} />
               </span>
               <span>Firefly</span>
             </Link>
             <div className={styles.mobileHeaderActions}>
-              <Link className={styles.iconLink} href="/search">
-                Search
+              <Link
+                className={styles.iconLink}
+                href="/search"
+                aria-label="Search"
+              >
+                <Icon name="search" size={18} />
               </Link>
               <button
                 className={styles.iconButton}
                 type="button"
                 aria-pressed={privacy}
+                aria-label={privacy ? "Show amounts" : "Hide amounts"}
                 onClick={() => setPrivacy(!privacy)}
               >
-                {privacy ? "Show amounts" : "Hide amounts"}
+                <Icon name={privacy ? "eye" : "eyeoff"} size={18} />
               </button>
               <button
                 className={styles.iconButton}
                 type="button"
+                aria-label="Appearance"
                 onClick={() => setAppearanceOpen(true)}
               >
-                Appearance
+                <Icon
+                  name={settings.theme === "dark" ? "sun" : "moon"}
+                  size={18}
+                />
               </button>
+              <UserMenu user={user} backendPublicUrl={backendPublicUrl} />
             </div>
           </header>
 
@@ -414,7 +382,7 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
               aria-label="Search"
             >
               <Icon name="search" size={18} />
-              <span>Search payments, people, pages</span>
+              <span>Search transactions, accounts, pages</span>
               <kbd className={styles.kbd}>⌘K</kbd>
             </Link>
 
@@ -431,14 +399,6 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                 aria-label="New transaction"
               >
                 <Icon name="plus" size={20} />
-              </Link>
-
-              <Link
-                className={styles.circleBtn}
-                href="/transactions/new"
-                aria-label="Send money"
-              >
-                <Icon name="send" size={18} />
               </Link>
 
               <button
@@ -463,13 +423,13 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
                 <Icon name={privacy ? "eye" : "eyeoff"} size={18} />
               </button>
 
-              <button
+              <Link
                 className={styles.circleBtn}
-                type="button"
+                href="/notifications"
                 aria-label="Notifications"
               >
                 <Icon name="bell" size={18} />
-              </button>
+              </Link>
 
               <div className={styles.topbarSep} />
 
@@ -543,8 +503,8 @@ export function AppShell({ user, backendPublicUrl, children }: AppShellProps) {
           ))}
         </div>
         <p className={styles.userMenuNote}>
-          Sections marked Soon are planned domain work and do not show simulated
-          financial data.
+          Sections marked Soon are not simulated with financial data. Available
+          pages read the existing Firefly API.
         </p>
       </Dialog>
 

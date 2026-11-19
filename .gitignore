@@ -10,3 +10,6 @@ test-results/
 !.env.test.example
 *.tsbuildinfo
 .DS_Store
+
+.data/
+.dev_token

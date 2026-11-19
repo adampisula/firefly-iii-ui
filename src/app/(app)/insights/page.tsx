@@ -7,7 +7,12 @@ import {
   type InsightOperation,
 } from "@/features/analysis/service";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay } from "@/components/ui/primitives";
+import {
+  BarChart,
+  FilterBar,
+  MoneyDisplay,
+  PageHeader,
+} from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -59,13 +64,12 @@ export default async function InsightsPage({
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Insights</p>
-        <h1>Expense, income and transfer insights</h1>
-        <p className="lede">
-          Backend aggregates for {range.label} ({range.start} to {range.end}).
-          Aggregates are not a report builder.
-        </p>
+      <PageHeader
+        eyebrow="Insights"
+        title="Expense, income and transfer insights"
+        lede={`Backend aggregates for ${range.label} (${range.start} to ${range.end}). Aggregates are not a report builder.`}
+      />
+      <FilterBar>
         <form className="search-form" action="/insights" method="get">
           <div className="field-group">
             <label className="field-label" htmlFor="insight-select">
@@ -104,7 +108,7 @@ export default async function InsightsPage({
             Load insight
           </button>
         </form>
-      </section>
+      </FilterBar>
       <section className="panel">
         <h2>{selected.label}</h2>
         {points.length === 0 ? (
@@ -112,36 +116,48 @@ export default async function InsightsPage({
             <p>No aggregate values were returned for this period.</p>
           </PermissionState>
         ) : (
-          <div
-            className="table-scroll"
-            tabIndex={0}
-            role="region"
-            aria-label={selected.label}
-          >
-            <table className="data-table">
-              <caption>{selected.label}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Label</th>
-                  <th scope="col">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {points.map((point) => (
-                  <tr key={point.label}>
-                    <td>{point.label}</td>
-                    <td>
-                      <MoneyDisplay
-                        amount={point.value}
-                        currency={point.currencyCode}
-                        decimalPlaces={point.decimalPlaces}
-                      />
-                    </td>
+          <>
+            <BarChart
+              title={selected.label}
+              summary={`${points.length} aggregate ${points.length === 1 ? "row" : "rows"} returned by Firefly.`}
+              points={points.map((point) => ({
+                label: point.label,
+                amount: point.value,
+                currency: point.currencyCode,
+                decimalPlaces: point.decimalPlaces,
+              }))}
+            />
+            <div
+              className="table-scroll"
+              tabIndex={0}
+              role="region"
+              aria-label={selected.label}
+            >
+              <table className="data-table">
+                <caption>{selected.label}</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Label</th>
+                    <th scope="col">Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {points.map((point) => (
+                    <tr key={point.label}>
+                      <td>{point.label}</td>
+                      <td>
+                        <MoneyDisplay
+                          amount={point.value}
+                          currency={point.currencyCode}
+                          decimalPlaces={point.decimalPlaces}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
     </div>

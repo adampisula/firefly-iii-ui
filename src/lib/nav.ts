@@ -27,7 +27,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         description:
           "Balances, cash flow and recent activity backed by the Firefly API.",
         task: "ANA-01",
-        status: "planned",
+        status: "available",
       },
     ],
   },
@@ -62,6 +62,12 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         task: "CORE-01",
         status: "available",
       },
+    ],
+  },
+  {
+    id: "planning",
+    label: "Planning",
+    links: [
       {
         id: "budgets",
         label: "Budgets",
@@ -86,6 +92,12 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         task: "CORE-09",
         status: "available",
       },
+    ],
+  },
+  {
+    id: "organize",
+    label: "Organize",
+    links: [
       {
         id: "categories",
         label: "Categories",
@@ -140,6 +152,12 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         task: "AUTO-02",
         status: "available",
       },
+    ],
+  },
+  {
+    id: "analysis",
+    label: "Analysis",
+    links: [
       {
         id: "insights",
         label: "Insights",
@@ -250,7 +268,7 @@ export const BOTTOM_NAV_LINKS: readonly NavLink[] = ALL_NAV_LINKS.filter(
     link.id === "overview" ||
     link.id === "accounts" ||
     link.id === "transactions" ||
-    link.id === "planning",
+    link.id === "budgets",
 );
 
 export function findNavLinkByPath(pathname: string): NavLink | undefined {

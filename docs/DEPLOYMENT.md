@@ -12,6 +12,10 @@
 
 The frontend browser is intended to call same-origin Next.js handlers. Those handlers will use the trusted `BACKEND_INTERNAL_API_URL`; the browser uses `BACKEND_PUBLIC_URL` only for approved native Firefly identity pages. No backend cookie sharing or cross-domain credentialed CORS is assumed. User PATs belong in per-user server-side sessions, not Compose environment variables.
 
+Appearance settings and custom background images are stored by the frontend, not by Firefly. The Compose example mounts the `frontend_appearance` volume at `/app/data` and sets `FRONTEND_DATA_DIR=/app/data`. The directory is keyed by a hash of the backend URL and user ID, with restrictive file permissions. Use one frontend replica, or replace the filesystem store with shared storage before scaling horizontally; a per-container volume would make appearance settings inconsistent across replicas. Financial data is never stored there.
+
+The reverse proxy must forward `/_next/`, `/fonts/`, `/scenes/` and `/api/` to the frontend origin. Do not cache authenticated HTML across deployments: stale HTML can reference CSS or JavaScript chunk names that no longer exist after a deploy. The production smoke check fetches the deployed page and every referenced stylesheet, script, font and scene asset so a missing CSS file fails validation.
+
 For local Compose syntax validation without starting services:
 
 ```sh

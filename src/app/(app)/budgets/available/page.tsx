@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listAvailableBudgets } from "@/features/budgets/service";
 import { ErrorState } from "@/components/shell/states";
-import { MoneyDisplay } from "@/components/ui/primitives";
+import { MoneyDisplay, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,17 +38,16 @@ export default async function AvailableBudgetsPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Available budgets</p>
-        <h1>Read-only available budget resources</h1>
-        <p className="lede">
-          Firefly exposes available budgets read-only. The frontend does not
-          offer create or delete controls.
-        </p>
-        <Link className="text-link" href="/budgets">
-          Back to budgets
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Available budgets"
+        title="Read-only available budget resources"
+        lede="Firefly exposes available budgets read-only. The frontend does not offer create or delete controls."
+        actions={
+          <Link className="text-link" href="/budgets">
+            Back to budgets
+          </Link>
+        }
+      />
       <section className="panel">
         {available.length === 0 ? (
           <p className="muted-note">No available budgets reported.</p>

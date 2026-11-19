@@ -33,13 +33,18 @@ test("appearance parsing defaults and clamps stored values", () => {
     parseAppearance(
       JSON.stringify({ theme: "dark", frost: 7, reducedTransparency: true }),
     ),
-    { theme: "dark", frost: 1, reducedTransparency: true },
+    {
+      ...DEFAULT_APPEARANCE,
+      theme: "dark",
+      frost: 1,
+      reducedTransparency: true,
+    },
   );
   assert.deepEqual(
     parseAppearance(
       JSON.stringify({ theme: "sepia", frost: -2, reducedTransparency: "yes" }),
     ),
-    { theme: "system", frost: 0, reducedTransparency: false },
+    { ...DEFAULT_APPEARANCE, frost: 0 },
   );
   assert.equal(clampFrost(Number.NaN), 0.5);
   assert.equal(parsePrivacy("true"), true);
@@ -54,9 +59,9 @@ test("appearance theme resolution follows system preference", () => {
   assert.equal(resolveTheme("dark", false), "dark");
   assert.match(
     serializeAppearance({
+      ...DEFAULT_APPEARANCE,
       theme: "light",
       frost: 0.25,
-      reducedTransparency: false,
     }),
     /"frost":0.25/,
   );
@@ -77,6 +82,7 @@ test("navigation manifest has unique links and honest planned states", () => {
   assert.equal(
     ALL_NAV_LINKS.filter((link) => link.status === "available").every((link) =>
       [
+        "overview",
         "settings",
         "help",
         "search",

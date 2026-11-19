@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { getSessionApiContext } from "@/lib/auth/api-context";
-import { listBudgets } from "@/features/budgets/service";
+import {
+  listBudgetLimits,
+  listBudgets,
+  type BudgetLimit,
+} from "@/features/budgets/service";
 import { BudgetForm } from "@/features/budgets/budget-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay, Status } from "@/components/ui/primitives";
+import { PageHeader, ProgressRow, Status } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +51,7 @@ export default async function BudgetsPage() {
 
   let budgets;
   let currencies: { code: string; name: string }[] = [];
+  let limitByBudget = new Map<string, BudgetLimit>();
   try {
     const [budgetData, currencyData] = await Promise.all([
       listBudgets(context.client),
@@ -55,6 +60,24 @@ export default async function BudgetsPage() {
     budgets = budgetData;
     currencies = mapCurrencies(currencyData.data).sort((left, right) =>
       left.code.localeCompare(right.code),
+    );
+    const limits = await Promise.all(
+      budgets
+        .filter((budget) => budget.active)
+        .slice(0, 24)
+        .map(async (budget) => {
+          try {
+            const rows = await listBudgetLimits(context.client, budget.id);
+            return rows[0] ? ([budget.id, rows[0]] as const) : null;
+          } catch {
+            return null;
+          }
+        }),
+    );
+    limitByBudget = new Map(
+      limits.filter(
+        (entry): entry is readonly [string, BudgetLimit] => !!entry,
+      ),
     );
   } catch {
     return (
@@ -66,22 +89,21 @@ export default async function BudgetsPage() {
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Budgets</p>
-        <h1>Budgets and period limits</h1>
-        <p className="lede">
-          Spending and auto-budget configuration come from Firefly.
-          Available-budget resources are read-only.
-        </p>
-        <div className="button-row">
-          <Link className="text-link" href="/budgets/available">
-            Available budgets
-          </Link>
-          <Link className="text-link" href="/budgets/without-budget">
-            Transactions without budget
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Budgets"
+        title="Budgets and period limits"
+        lede="Spending and auto-budget configuration come from Firefly. Available-budget resources are read-only."
+        actions={
+          <>
+            <Link className="text-link" href="/budgets/available">
+              Available budgets
+            </Link>
+            <Link className="text-link" href="/budgets/without-budget">
+              Transactions without budget
+            </Link>
+          </>
+        }
+      />
 
       <section className="panel">
         <h2>Budget list</h2>
@@ -124,17 +146,36 @@ export default async function BudgetsPage() {
                       </Status>
                     </td>
                     <td>
-                      {budget.spent.length === 0
-                        ? "No spending reported"
-                        : budget.spent.map((spent) => (
-                            <div key={`${budget.id}-${spent.currencyCode}`}>
-                              <MoneyDisplay
-                                amount={spent.sum}
+                      {budget.spent.length === 0 ? (
+                        "No spending reported"
+                      ) : (
+                        <div className="budget-progress-list">
+                          {budget.spent.map((spent) => {
+                            const limit = limitByBudget.get(budget.id);
+                            return (
+                              <ProgressRow
+                                key={`${budget.id}-${spent.currencyCode}`}
+                                label={`${budget.name} (${spent.currencyCode})`}
+                                current={spent.sum}
+                                target={
+                                  limit &&
+                                  limit.currencyCode === spent.currencyCode
+                                    ? limit.amount
+                                    : null
+                                }
                                 currency={spent.currencyCode}
                                 decimalPlaces={spent.decimalPlaces}
+                                detail={
+                                  limit &&
+                                  limit.currencyCode === spent.currencyCode
+                                    ? "Current limit"
+                                    : "No matching limit reported"
+                                }
                               />
-                            </div>
-                          ))}
+                            );
+                          })}
+                        </div>
+                      )}
                     </td>
                     <td>
                       {budget.autoBudgetType === "none"

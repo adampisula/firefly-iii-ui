@@ -3,7 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listPiggyBanks } from "@/features/piggy-banks/service";
 import { PiggyForm } from "@/features/piggy-banks/piggy-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay } from "@/components/ui/primitives";
+import { MoneyDisplay, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -82,14 +82,11 @@ export default async function PiggyBanksPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Savings goals</p>
-        <h1>Piggy banks and reserved money</h1>
-        <p className="lede">
-          Targets, allocations and event history from Firefly. Reserved funds
-          are bookkeeping allocations, not bank transfers.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Savings goals"
+        title="Piggy banks and reserved money"
+        lede="Targets, allocations and event history from Firefly. Reserved funds are bookkeeping allocations, not bank transfers."
+      />
       <section className="panel">
         <h2>Savings goals</h2>
         {pigs.length === 0 ? (

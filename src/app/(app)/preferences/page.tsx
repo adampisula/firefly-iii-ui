@@ -9,6 +9,7 @@ import {
   type PreferenceDefaults,
 } from "@/features/preferences/preference-form";
 import { ErrorState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 function mapAccounts(payload: unknown): { id: string; name: string }[] {
@@ -90,15 +91,11 @@ export default async function PreferencesPage() {
   };
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Preferences</p>
-        <h1>Preferences, locale and defaults</h1>
-        <p className="lede">
-          Backend preferences use verified keys. English UI is fixed; formatting
-          locale and dashboard defaults are configurable without creating
-          translation or RTL UI.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Preferences"
+        title="Preferences, locale and defaults"
+        lede="Backend preferences use verified keys. English UI is fixed; formatting locale and dashboard defaults are configurable without creating translation or RTL UI."
+      />
       <section className="panel">
         <h2>Supported preferences</h2>
         <PreferenceForm defaults={defaults} accounts={accounts} />

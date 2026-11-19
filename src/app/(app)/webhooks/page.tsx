@@ -4,7 +4,7 @@ import { ApiClientError } from "@/lib/api/client";
 import { listWebhooks, type WebhookRecord } from "@/features/webhooks/service";
 import { CreateWebhookForm } from "@/features/webhooks/webhook-forms";
 import { ErrorState } from "@/components/shell/states";
-import { Status } from "@/components/ui/primitives";
+import { Status, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -47,13 +47,17 @@ export default async function WebhooksPage() {
   if (disabled)
     return (
       <div className="page-stack">
+        <PageHeader
+          eyebrow="Webhooks"
+          title="Webhooks are disabled"
+          lede="Firefly returned 404 for the webhook API. The feature is disabled on this backend."
+          actions={
+            <Link className="text-link" href="/help">
+              Backend help
+            </Link>
+          }
+        />
         <section className="panel">
-          <p className="eyebrow">Webhooks</p>
-          <h1>Webhooks are disabled</h1>
-          <p className="lede">
-            Firefly returned 404 for the webhook API. The feature is disabled on
-            this backend.
-          </p>
           <p>
             <Status kind="warning">Feature disabled</Status>
           </p>
@@ -62,21 +66,16 @@ export default async function WebhooksPage() {
             Enable the feature in the backend configuration, then reload this
             page.
           </p>
-          <Link className="text-link" href="/help">
-            Backend help
-          </Link>
         </section>
       </div>
     );
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Webhooks</p>
-        <h1>Webhooks and delivery diagnostics</h1>
-        <p className="lede">
-          Outbound webhook configuration, test delivery, messages and attempts.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Webhooks"
+        title="Webhooks and delivery diagnostics"
+        lede="Outbound webhook configuration, test delivery, messages and attempts."
+      />
       <section className="panel">
         <h2>Webhooks</h2>
         {webhooks.length === 0 ? (

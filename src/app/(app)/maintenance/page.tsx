@@ -3,19 +3,16 @@ import {
   DestroyForm,
   PurgeForm,
 } from "@/features/maintenance/maintenance-forms";
+import { PageHeader } from "@/components/ui/primitives";
 export const dynamic = "force-dynamic";
 export default function MaintenancePage() {
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Maintenance</p>
-        <h1>Destructive data maintenance</h1>
-        <p className="lede">
-          These operations permanently change or remove financial data. Type the
-          exact confirmation phrase and review the backend warning before
-          proceeding.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Maintenance"
+        title="Destructive data maintenance"
+        lede="These operations permanently change or remove financial data. Type the exact confirmation phrase and review the backend warning before proceeding."
+      />
       <section className="panel">
         <h2>Delete a data family</h2>
         <DestroyForm />

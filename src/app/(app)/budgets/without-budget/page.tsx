@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { transactionsWithoutBudget } from "@/features/budgets/service";
 import { ErrorState } from "@/components/shell/states";
-import { MoneyDisplay } from "@/components/ui/primitives";
+import { MoneyDisplay, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,17 +38,16 @@ export default async function WithoutBudgetPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Without budget</p>
-        <h1>Transactions without a budget</h1>
-        <p className="lede">
-          Backend-authoritative unbudgeted spending. Assigned budget edits
-          remain in the transaction editor.
-        </p>
-        <Link className="text-link" href="/budgets">
-          Back to budgets
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Without budget"
+        title="Transactions without a budget"
+        lede="Backend-authoritative unbudgeted spending. Assigned budget edits remain in the transaction editor."
+        actions={
+          <Link className="text-link" href="/budgets">
+            Back to budgets
+          </Link>
+        }
+      />
       <section className="panel">
         {transactions.groups.length === 0 ? (
           <p className="muted-note">No unbudgeted transactions reported.</p>

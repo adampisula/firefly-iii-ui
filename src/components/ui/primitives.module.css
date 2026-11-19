@@ -364,14 +364,20 @@
 }
 
 .dialog {
+  display: flex;
   width: min(36rem, calc(100vw - 2rem));
   max-height: min(80vh, 48rem);
+  flex-direction: column;
   padding: 0;
   border: 1px solid var(--glass-rim);
   border-radius: var(--r-xl);
   background: var(--panel-opaque);
   box-shadow: var(--shadow-lg);
   color: var(--ink);
+}
+
+.dialog:not([open]) {
+  display: none;
 }
 
 .dialog::backdrop {
@@ -393,6 +399,7 @@
 }
 
 .dialogBody {
+  min-height: 0;
   overflow: auto;
   padding: var(--sp-5);
 }
@@ -503,5 +510,277 @@
     forced-color-adjust: none;
     background: Highlight;
     color: HighlightText;
+  }
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+
+.pageHeaderText {
+  min-width: min(100%, 20rem);
+  flex: 1;
+}
+
+.pageHeader h1 {
+  max-width: 24ch;
+  margin: var(--sp-1) 0 var(--sp-2);
+  font-size: clamp(var(--fs-3xl), 3vw, var(--fs-4xl));
+  line-height: 1.08;
+}
+
+.pageEyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pageLede {
+  max-width: 64ch;
+  color: var(--ink-2);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+}
+
+.pageActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--sp-3);
+}
+
+.statTile {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-4);
+  border: 1px solid var(--glass-rim);
+  border-radius: var(--r-lg);
+  background: var(--card-flat);
+  box-shadow: var(--glass-sheen);
+}
+
+.statLabel {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.statValue {
+  overflow-wrap: anywhere;
+  font-size: clamp(var(--fs-xl), 2vw, var(--fs-3xl));
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.statHint {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.statTile[data-tone="good"] .statValue {
+  color: var(--good);
+}
+
+.statTile[data-tone="warn"] .statValue {
+  color: var(--warn);
+}
+
+.chartFrame {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.chartTitle {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.chartSummary {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+
+.chartEmpty {
+  margin: 0;
+  padding: var(--sp-5);
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+  color: var(--muted);
+}
+
+.lineChart {
+  height: 180px;
+  padding: var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 25%,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 20% 100%,
+    var(--card-sunk);
+}
+
+.lineChart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.barChart {
+  display: flex;
+  min-height: 180px;
+  align-items: stretch;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-2) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card-sunk);
+}
+
+.barColumn {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+}
+
+.barValue {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ink-2);
+  font-size: var(--fs-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar {
+  width: min(72%, 42px);
+  min-height: 4px;
+  border-radius: var(--r-xs) var(--r-xs) 2px 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-hi));
+}
+
+.barLabel {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--fs-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progressRow {
+  display: grid;
+  gap: var(--sp-2);
+  padding-block: var(--sp-3);
+  border-top: 1px solid var(--line);
+}
+
+.progressRow:first-child {
+  border-top: 0;
+}
+
+.progressHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.progressLabel {
+  font-weight: var(--weight-semibold);
+}
+
+.progressAmounts {
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.progressTrack {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: var(--card-sunk);
+}
+
+.progressTrack > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hi));
+}
+
+.progressDetail {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border: 1px solid var(--glass-rim);
+  border-radius: var(--r-lg);
+  background: var(--card-flat);
+}
+
+.emptyState {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-5);
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+  color: var(--muted);
+  text-align: center;
+}
+
+.emptyState strong {
+  color: var(--ink);
+}
+
+@media (max-width: 760px) {
+  .pageHeader {
+    align-items: flex-start;
+  }
+
+  .pageActions {
+    width: 100%;
+  }
+
+  .barChart {
+    min-height: 150px;
+    gap: var(--sp-1);
+  }
+
+  .barValue {
+    display: none;
   }
 }

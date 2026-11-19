@@ -2,7 +2,12 @@ import Link from "next/link";
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listAccounts, accountTypeLabel } from "@/features/accounts/service";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay, Status } from "@/components/ui/primitives";
+import {
+  FilterBar,
+  MoneyDisplay,
+  PageHeader,
+  Status,
+} from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -89,22 +94,18 @@ export default async function AccountsPage({
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Accounts</p>
-        <h1>Accounts and liabilities</h1>
-        <p className="lede">
-          Asset, expense, revenue and liability accounts from your Firefly
-          administration. Balances are backend values, not locally computed.
-        </p>
-        <div className="button-row">
+      <PageHeader
+        eyebrow="Accounts"
+        title="Accounts and liabilities"
+        lede="Asset, expense, revenue and liability accounts from your Firefly administration. Balances are backend values, not locally computed."
+        actions={
           <Link className="button-link" href="/accounts/new">
             Create account
           </Link>
-        </div>
-      </section>
+        }
+      />
 
-      <section className="panel">
-        <h2>Filter accounts</h2>
+      <FilterBar>
         <form className="search-form" action="/accounts" method="get">
           <div className="field-group">
             <label className="field-label" htmlFor="account-filter-type">
@@ -136,7 +137,7 @@ export default async function AccountsPage({
             Apply filters
           </button>
         </form>
-      </section>
+      </FilterBar>
 
       <section className="panel">
         <h2>Account list</h2>

@@ -131,12 +131,13 @@
     0 2px 6px color-mix(in oklab, var(--black) 8%, transparent),
     0 34px 70px -30px color-mix(in oklab, var(--black) 52%, transparent);
 
-  --accent: var(--green);
-  --accent-hi: color-mix(in oklab, var(--green) 82%, var(--black));
-  --accent-soft: color-mix(in oklab, var(--green) 10%, transparent);
-  --accent-wash: color-mix(in oklab, var(--green) 16%, var(--white));
-  --accent-line: color-mix(in oklab, var(--green) 30%, transparent);
-  --accent-glow: color-mix(in oklab, var(--green) 32%, transparent);
+  --accent-base: var(--green);
+  --accent: var(--accent-base);
+  --accent-hi: color-mix(in oklab, var(--accent-base) 82%, var(--black));
+  --accent-soft: color-mix(in oklab, var(--accent-base) 10%, transparent);
+  --accent-wash: color-mix(in oklab, var(--accent-base) 16%, var(--white));
+  --accent-line: color-mix(in oklab, var(--accent-base) 30%, transparent);
+  --accent-glow: color-mix(in oklab, var(--accent-base) 32%, transparent);
   --signal: var(--mint);
   --good: var(--green);
   --good-soft: color-mix(in oklab, var(--green) 10%, transparent);
@@ -222,12 +223,13 @@
   --shadow-lg:
     0 2px 6px color-mix(in oklab, var(--black) 52%, transparent),
     0 34px 80px -28px color-mix(in oklab, var(--black) 90%, transparent);
-  --accent: var(--mint);
-  --accent-hi: color-mix(in oklab, var(--mint) 82%, var(--white));
-  --accent-soft: color-mix(in oklab, var(--mint) 12%, transparent);
-  --accent-wash: color-mix(in oklab, var(--mint) 16%, transparent);
-  --accent-line: color-mix(in oklab, var(--mint) 34%, transparent);
-  --accent-glow: color-mix(in oklab, var(--mint) 28%, transparent);
+  --accent-base: var(--mint);
+  --accent: var(--accent-base);
+  --accent-hi: color-mix(in oklab, var(--accent-base) 82%, var(--white));
+  --accent-soft: color-mix(in oklab, var(--accent-base) 12%, transparent);
+  --accent-wash: color-mix(in oklab, var(--accent-base) 16%, transparent);
+  --accent-line: color-mix(in oklab, var(--accent-base) 34%, transparent);
+  --accent-glow: color-mix(in oklab, var(--accent-base) 28%, transparent);
   --good: var(--mint);
   --good-soft: color-mix(in oklab, var(--mint) 12%, transparent);
   --warn: color-mix(in oklab, var(--white) 78%, var(--grey-500));
@@ -313,12 +315,13 @@
     --shadow-lg:
       0 2px 6px color-mix(in oklab, var(--black) 52%, transparent),
       0 34px 80px -28px color-mix(in oklab, var(--black) 90%, transparent);
-    --accent: var(--mint);
-    --accent-hi: color-mix(in oklab, var(--mint) 82%, var(--white));
-    --accent-soft: color-mix(in oklab, var(--mint) 12%, transparent);
-    --accent-wash: color-mix(in oklab, var(--mint) 16%, transparent);
-    --accent-line: color-mix(in oklab, var(--mint) 34%, transparent);
-    --accent-glow: color-mix(in oklab, var(--mint) 28%, transparent);
+    --accent-base: var(--mint);
+    --accent: var(--accent-base);
+    --accent-hi: color-mix(in oklab, var(--accent-base) 82%, var(--white));
+    --accent-soft: color-mix(in oklab, var(--accent-base) 12%, transparent);
+    --accent-wash: color-mix(in oklab, var(--accent-base) 16%, transparent);
+    --accent-line: color-mix(in oklab, var(--accent-base) 34%, transparent);
+    --accent-glow: color-mix(in oklab, var(--accent-base) 28%, transparent);
     --good: var(--mint);
     --good-soft: color-mix(in oklab, var(--mint) 12%, transparent);
     --warn: color-mix(in oklab, var(--white) 78%, var(--grey-500));

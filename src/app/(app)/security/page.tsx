@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getCurrentAuth } from "@/lib/auth/service";
 import { getServerEnvironment } from "@/lib/server-env";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -62,14 +63,12 @@ export default async function SecurityPage() {
   const backend = backendPublicUrlOrNull();
   return (
     <div className="page-stack">
+      <PageHeader
+        eyebrow="Security and identity"
+        title="Trusted native identity handoffs"
+        lede="Firefly owns identity validation, MFA, recovery, profile security and token/client lifecycle. These links open the native backend in a separate session; no token or secret is placed in a URL."
+      />
       <section className="panel">
-        <p className="eyebrow">Security and identity</p>
-        <h1>Trusted native identity handoffs</h1>
-        <p className="lede">
-          Firefly owns identity validation, MFA, recovery, profile security and
-          token/client lifecycle. These links open the native backend in a
-          separate session; no token or secret is placed in a URL.
-        </p>
         <p>
           {auth.session
             ? `Frontend session connected as ${auth.session.user.email}.`

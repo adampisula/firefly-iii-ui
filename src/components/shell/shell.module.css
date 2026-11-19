@@ -37,7 +37,8 @@
   overflow: hidden;
   background:
     linear-gradient(var(--tint), var(--tint)),
-    var(--bg) url("/scenes/room-blur.jpg") 50% 45% / cover no-repeat fixed;
+    var(--bg) var(--app-bg-image, url("/scenes/room-blur.jpg")) 50% 45% / cover
+      no-repeat fixed;
   box-shadow:
     inset 0 0 0 1px var(--glass-rim),
     var(--glass-sheen),
@@ -45,6 +46,13 @@
   backdrop-filter: blur(var(--panel-blur));
   -webkit-backdrop-filter: blur(var(--panel-blur));
   transition: grid-template-columns var(--t-mid, 240ms) var(--ease-out, ease);
+}
+
+[data-theme="dark"] .slab {
+  background:
+    linear-gradient(var(--tint), var(--tint)),
+    var(--bg) var(--app-bg-image, url("/scenes/room.jpg")) 50% 45% / cover
+      no-repeat fixed;
 }
 
 /* Collapsed sidebar */

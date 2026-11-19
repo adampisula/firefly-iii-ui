@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listRates } from "@/features/currencies/service";
 import { DeleteRate, RateForm } from "@/features/currencies/currency-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -38,17 +39,16 @@ export default async function ExchangeRatesPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Exchange rates</p>
-        <h1>Dated exchange rates</h1>
-        <p className="lede">
-          Exact pair/date rates. Automatic rate downloads are a backend feature
-          and are not simulated here.
-        </p>
-        <Link className="text-link" href="/currencies">
-          Currencies
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Exchange rates"
+        title="Dated exchange rates"
+        lede="Exact pair/date rates. Automatic rate downloads are a backend feature and are not simulated here."
+        actions={
+          <Link className="text-link" href="/currencies">
+            Currencies
+          </Link>
+        }
+      />
       <section className="panel">
         <h2>Rates</h2>
         {rates.length === 0 ? (

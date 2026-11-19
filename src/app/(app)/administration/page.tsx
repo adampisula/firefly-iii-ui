@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listAdministrations } from "@/features/administrations/service";
 import { AdministrationForm } from "@/features/administrations/admin-form";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 function mapCurrencies(payload: unknown): { code: string; name: string }[] {
@@ -57,14 +58,11 @@ export default async function AdministrationPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Administration</p>
-        <h1>Existing administration settings</h1>
-        <p className="lede">
-          Title and primary currency for the administration group. No
-          create/delete/switch/sharing screens are offered.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Administration"
+        title="Existing administration settings"
+        lede="Title and primary currency for the administration group. No create/delete/switch/sharing screens are offered."
+      />
       {groups.length === 0 ? (
         <PermissionState title="No administration visible">
           <p>The backend did not return a user group.</p>

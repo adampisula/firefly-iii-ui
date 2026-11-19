@@ -1,7 +1,7 @@
 import packageMetadata from "../../../../package.json" with { type: "json" };
 import { getSessionApiContext } from "@/lib/auth/api-context";
 import { getServerEnvironment } from "@/lib/server-env";
-import { Status } from "@/components/ui/primitives";
+import { PageHeader, Status } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -41,9 +41,12 @@ export default async function HelpPage() {
 
   return (
     <div className="page-stack">
+      <PageHeader
+        eyebrow="Help and system"
+        title="Firefly frontend"
+        lede="Version, connection diagnostics and native backend help links."
+      />
       <section className="panel">
-        <p className="eyebrow">Help and system</p>
-        <h1>Firefly frontend</h1>
         <dl className="detail-list">
           <div>
             <dt>Frontend version</dt>

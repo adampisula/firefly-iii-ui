@@ -3,7 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listCurrencies } from "@/features/currencies/service";
 import { CurrencyForm } from "@/features/currencies/currency-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { Status } from "@/components/ui/primitives";
+import { Status, PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -39,17 +39,16 @@ export default async function CurrenciesPage() {
   }
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Currencies</p>
-        <h1>Currencies and primary currency</h1>
-        <p className="lede">
-          Enable/disable, create/update and choose primary. Disabling an in-use
-          currency is rejected; amounts are never relabeled.
-        </p>
-        <Link className="text-link" href="/exchange-rates">
-          Exchange rates
-        </Link>
-      </section>
+      <PageHeader
+        eyebrow="Currencies"
+        title="Currencies and primary currency"
+        lede="Enable/disable, create/update and choose primary. Disabling an in-use currency is rejected; amounts are never relabeled."
+        actions={
+          <Link className="text-link" href="/exchange-rates">
+            Exchange rates
+          </Link>
+        }
+      />
       <section className="panel">
         <h2>Currency list</h2>
         {currencies.length === 0 ? (

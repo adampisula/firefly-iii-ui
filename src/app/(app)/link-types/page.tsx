@@ -3,6 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { listLinkTypes } from "@/features/transaction-actions/service";
 import { LinkTypeForm } from "@/features/transaction-actions/link-type-form";
 import { ErrorState, PermissionState } from "@/components/shell/states";
+import { PageHeader } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -42,15 +43,11 @@ export default async function LinkTypesPage() {
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Link types</p>
-        <h1>Transaction link types</h1>
-        <p className="lede">
-          Link types describe how two transaction journals relate. Names and
-          inward/outward descriptions must be unique; writes are enforced by the
-          owner role in Firefly.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Link types"
+        title="Transaction link types"
+        lede="Link types describe how two transaction journals relate. Names and inward/outward descriptions must be unique; writes are enforced by the owner role in Firefly."
+      />
 
       <section className="panel">
         <h2>Existing link types</h2>

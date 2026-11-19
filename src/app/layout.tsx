@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Script from "next/script";
 import { APPEARANCE_BOOTSTRAP_SCRIPT } from "@/lib/appearance";
 import { PrivacyProvider } from "@/components/shell/privacy-context";
+import "../styles/urbanist.css";
 import "../styles/tokens.css";
 import "./globals.css";
 

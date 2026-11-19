@@ -45,13 +45,33 @@ async function request(path) {
 try {
   const page = await request("/");
   assert.equal(page.status, 200);
-  assert.match(await page.text(), /<title>Firefly<\/title>/);
+  const html = await page.text();
+  assert.match(html, /<title>Firefly<\/title>/);
+
+  const assetPaths = new Set([
+    ...Array.from(
+      html.matchAll(/(?:href|src)="([^"]+\.(?:css|js|woff2?|jpg|png|webp))"/g),
+      (match) => match[1],
+    ),
+    "/fonts/urbanist.css",
+    "/scenes/room.jpg",
+    "/scenes/room-blur.jpg",
+  ]);
+  for (const path of assetPaths) {
+    if (path.startsWith("data:")) continue;
+    const assetUrl = new URL(path, origin);
+    assert.equal(assetUrl.origin, origin, `Unexpected external asset: ${path}`);
+    const asset = await fetch(assetUrl);
+    assert.equal(asset.status, 200, `Missing asset: ${path}`);
+    const body = await asset.arrayBuffer();
+    assert.ok(body.byteLength > 0, `Empty asset: ${path}`);
+  }
 
   const health = await fetch(new URL("/api/health", origin));
   assert.equal(health.status, 200);
   assert.deepEqual(await health.json(), { status: "ok" });
   console.log(
-    "Production smoke passed: / and /api/health returned expected responses.",
+    `Production smoke passed: /, ${assetPaths.size} assets and /api/health returned expected responses.`,
   );
 } finally {
   if (server.exitCode === null && server.signalCode === null) {

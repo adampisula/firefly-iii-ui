@@ -5,6 +5,10 @@ export interface MoneyValue {
   value: string;
   currencyCode: string;
   decimalPlaces: number;
+  title?: string;
+  currencySymbol?: string;
+  subTitle?: string;
+  noAvailableBudgets?: boolean;
 }
 export interface ChartPoint {
   label: string;
@@ -28,15 +32,33 @@ function num(value: unknown, fallback = 2): number {
 export function mapSummary(payload: unknown): Record<string, MoneyValue> {
   const root = asRecord(payload);
   const result: Record<string, MoneyValue> = {};
-  for (const [key, value] of Object.entries(root)) {
-    const item = asRecord(value);
-    if (typeof item.value === "string" || typeof item.value === "number") {
-      result[key] = {
-        value: String(item.value),
-        currencyCode: text(item.currency_code),
-        decimalPlaces: num(item.currency_decimal_places),
-      };
+  const entries: { key: string; value: unknown }[] = [];
+  if (Array.isArray(root.data)) {
+    for (const value of root.data) {
+      const item = asRecord(value);
+      const key = text(item.key);
+      if (key) entries.push({ key, value: item });
     }
+  } else if (typeof root.data === "object" && root.data !== null) {
+    for (const [key, value] of Object.entries(root.data))
+      entries.push({ key, value });
+  }
+  for (const [key, value] of Object.entries(root)) {
+    if (key !== "data") entries.push({ key, value });
+  }
+  for (const { key, value } of entries) {
+    const item = asRecord(value);
+    const raw = item.monetary_value ?? item.value;
+    if (typeof raw !== "string" && typeof raw !== "number") continue;
+    result[key] = {
+      value: String(raw),
+      currencyCode: text(item.currency_code),
+      decimalPlaces: num(item.currency_decimal_places),
+      title: text(item.title),
+      currencySymbol: text(item.currency_symbol),
+      subTitle: text(item.sub_title),
+      noAvailableBudgets: item.no_available_budgets === true,
+    };
   }
   return result;
 }

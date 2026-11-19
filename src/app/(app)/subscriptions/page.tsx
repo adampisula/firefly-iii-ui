@@ -3,7 +3,7 @@ import { getSessionApiContext } from "@/lib/auth/api-context";
 import { billGroupLabel, listBills } from "@/features/subscriptions/service";
 import { BillForm } from "@/features/subscriptions/bill-forms";
 import { ErrorState, PermissionState } from "@/components/shell/states";
-import { MoneyDisplay, Status } from "@/components/ui/primitives";
+import { MoneyDisplay, PageHeader, Status } from "@/components/ui/primitives";
 
 export const dynamic = "force-dynamic";
 
@@ -70,14 +70,11 @@ export default async function SubscriptionsPage() {
 
   return (
     <div className="page-stack">
-      <section className="panel">
-        <p className="eyebrow">Subscriptions</p>
-        <h1>Subscriptions and bills</h1>
-        <p className="lede">
-          Expected payments, matching rules and timelines from Firefly.
-          Canonical bills and subscription aliases share the same records.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="Subscriptions"
+        title="Subscriptions and bills"
+        lede="Expected payments, matching rules and timelines from Firefly. Canonical bills and subscription aliases share the same records."
+      />
       <section className="panel">
         <h2>Subscription list</h2>
         {bills.length === 0 ? (
