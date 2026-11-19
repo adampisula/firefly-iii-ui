@@ -11,6 +11,8 @@ services:
       BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:?Set BACKEND_PUBLIC_URL}
       BACKEND_INTERNAL_API_URL: ${BACKEND_INTERNAL_API_URL:-http://firefly:8080/api/v1}
       FRONTEND_DATA_DIR: /app/data
+      AI_ASSISTANT_ENABLED: ${AI_ASSISTANT_ENABLED:-false}
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET}
     depends_on:
       firefly:
         condition: service_started

@@ -83,6 +83,7 @@ test("navigation manifest has unique links and honest planned states", () => {
     ALL_NAV_LINKS.filter((link) => link.status === "available").every((link) =>
       [
         "overview",
+        "assistant",
         "settings",
         "help",
         "search",

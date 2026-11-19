@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import {
   mkdir,
   readFile,
@@ -17,7 +16,7 @@ import {
   type AppearanceSettings,
   type BackgroundSetting,
 } from "../appearance.ts";
-import { getServerEnvironment } from "../server-env.ts";
+import { getDataRoot, getOwnerKey } from "../user-data/owner-key.ts";
 
 export const MAX_BACKGROUND_BYTES = 8 * 1024 * 1024;
 
@@ -45,19 +44,8 @@ interface StoredAppearance {
   background: StoredBackground | null;
 }
 
-function dataRoot(): string {
-  return process.env.FRONTEND_DATA_DIR ?? path.join(process.cwd(), ".data");
-}
-
-function ownerKey(userId: string): string {
-  const environment = getServerEnvironment();
-  return createHash("sha256")
-    .update(`${environment.backendInternalApiUrl.toString()}|${userId}`)
-    .digest("hex");
-}
-
 function ownerDirectory(userId: string): string {
-  return path.join(dataRoot(), "appearance", ownerKey(userId));
+  return path.join(getDataRoot(), "appearance", getOwnerKey(userId));
 }
 
 function settingsPath(userId: string): string {

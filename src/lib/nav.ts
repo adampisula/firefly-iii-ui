@@ -159,6 +159,15 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     label: "Analysis",
     links: [
       {
+        id: "assistant",
+        label: "Assistant",
+        href: "/assistant",
+        description:
+          "Chat with a configured AI using read/write Firefly tools and approvals.",
+        task: "AI-01",
+        status: "available",
+      },
+      {
         id: "insights",
         label: "Insights",
         href: "/insights",
@@ -313,6 +322,8 @@ export function getNavIcon(id: string): string {
       return "wifi";
     case "recurrences":
       return "repeat";
+    case "assistant":
+      return "sparkle";
     case "insights":
     case "reports":
     case "exchange-rates":

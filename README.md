@@ -2,7 +2,7 @@
 
 An English Next.js App Router frontend for the **unmodified official Firefly III 6.7.9 backend**, with Firefly branding and the Verdelo visual direction. The frontend and backend are served from separate public domains in one Compose deployment. Backend identity screens (login, registration, password reset, MFA, profile/security, PAT/OAuth client and cron-token management) remain native handoffs.
 
-Supported now: search/autocomplete, accounts and liabilities, transaction reads/editor with splits, links, budgets, subscriptions, savings goals, categories/tags/object groups, attachments, rules, recurrences, webhooks (when enabled), chart/insight aggregates and settings. Reconciliation, repository report families, notification credentials, owner-only writes and bulk helper workflows remain explicitly documented residuals. This is a scoped release, not a full native-parity claim.
+Supported now: search/autocomplete, accounts and liabilities, transaction reads/editor with splits, links, budgets, subscriptions, savings goals, categories/tags/object groups, attachments, rules, recurrences, webhooks (when enabled), chart/insight aggregates, settings and an optional AI assistant with approval-gated Firefly tools. The assistant is disabled unless `AI_ASSISTANT_ENABLED=true`; provider URL, model and API key are configured per user in Assistant settings and stored in SQLite. Reconciliation, repository report families, notification credentials, owner-only writes and bulk helper workflows remain explicitly documented residuals. This is a scoped release, not a full native-parity claim.
 
 ## Development
 
@@ -58,8 +58,10 @@ BACKEND_PUBLIC_URL=https://firefly.example.com
 BACKEND_INTERNAL_API_URL=http://firefly:8080/api/v1
 FIREFLY_IMAGE=fireflyiii/core:version-6.7.9@sha256:d51ab6a3a7b91a5c892441578e0da7f2935f84f36bd1151fc3833acc6e060871
 FIREFLY_APP_KEY=<32-random-characters>
+SESSION_SECRET=<long-random-secret>
 POSTGRES_PASSWORD=<strong-database-password>
 FIREFLY_SITE_OWNER=you@example.com
+AI_ASSISTANT_ENABLED=false
 ```
 
 `BACKEND_INTERNAL_API_URL` is server-to-server only and must never be exposed to the browser. `FRONTEND_PUBLIC_URL` and `BACKEND_PUBLIC_URL` are the separate public origins. Use the verified official backend tag+digest shown in `backend-compatibility.json`; do not use `latest` or a custom backend image.
