@@ -26,8 +26,8 @@ body {
 
 [data-theme="light"] body,
 html[data-theme="light"] body {
-  background: var(--bg) var(--app-bg-image, url("/scenes/room-blur.jpg")) 50%
-    45% / cover no-repeat fixed;
+  background: var(--bg) var(--app-bg-image, url("/scenes/room.jpg")) 50% 45% /
+    cover no-repeat fixed;
 }
 
 [data-theme="dark"] body,
